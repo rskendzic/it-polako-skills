@@ -1,0 +1,15 @@
+{
+  "name": "it-polako-skills",
+  "displayName": "IT Polako Skills",
+  "version": "0.1.0",
+  "description": "Srpski Agent Skills za razjašnjavanje ideja i razumevanje stvarnih artefakata.",
+  "author": {
+    "name": "IT Polako",
+    "url": "https://skendzic.dev"
+  },
+  "homepage": "https://skendzic.dev",
+  "repository": "https://github.com/rskendzic/it-polako-skills",
+  "license": "MIT",
+  "keywords": ["agent-skills", "serbian", "claude-code", "codex", "learning"],
+  "skills": "./skills/"
+}

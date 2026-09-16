@@ -1,0 +1,157 @@
+{
+  "meta": {
+    "title": "Ugovor o održavanju sajta, primer",
+    "artifact_type": "contract",
+    "goal": "Razumeti šta naručilac mora da uradi pre raskida i koliki je finansijski rizik kašnjenja.",
+    "disclaimer": "Ovo je objašnjenje sintetičkog dokumenta. Nije pravni savet."
+  },
+  "sections": [
+    {
+      "id": "placanje",
+      "title": "Plaćanje i kašnjenje",
+      "summary": "Naručilac plaća mesečnu naknadu do petog dana u mesecu. Posle tog roka nastaje ugovorena dnevna naknada za kašnjenje.",
+      "why_it_matters": "Kašnjenje direktno povećava dug, ali ovaj primer ne kaže da automatski raskida ugovor.",
+      "source_refs": [
+        {
+          "label": "Član 4",
+          "location": "strana 2",
+          "quote": "Naručilac plaća 60.000 RSD do petog dana u mesecu. Za svaki započeti dan kašnjenja obračunava se 500 RSD."
+        }
+      ],
+      "details": [
+        "Rok je vezan za kalendarski dan, a ne za prijem fakture.",
+        "Tekst ne određuje gornju granicu ukupne naknade za kašnjenje."
+      ],
+      "consequences": [
+        "Tri započeta dana kašnjenja dodaju 1.500 RSD prema navedenoj formuli."
+      ],
+      "uncertainties": [
+        "Nije navedeno šta se dešava kada peti dan pada na neradni dan."
+      ]
+    },
+    {
+      "id": "otklanjanje-povrede",
+      "title": "Rok za otklanjanje povrede",
+      "summary": "Pre raskida zbog povrede obaveze, druga strana mora dobiti pisano upozorenje i osam dana da povredu otkloni.",
+      "why_it_matters": "Raskid bez upozorenja i dodatnog roka nije postupak opisan ovim primerom.",
+      "source_refs": [
+        {
+          "label": "Član 7.1",
+          "location": "strana 3",
+          "quote": "Strana koja tvrdi da je ugovor povređen dostavlja pisano upozorenje i ostavlja rok od osam dana za otklanjanje povrede."
+        }
+      ],
+      "details": [
+        "Upozorenje mora biti pisano.",
+        "Osmodnevni rok prethodi pravu na raskid iz člana 7.2."
+      ],
+      "consequences": [
+        "Ako se povreda otkloni u ostavljenom roku, uslov za raskid iz naredne klauzule nije ispunjen."
+      ],
+      "uncertainties": [
+        "Primer ne definiše kada se pisano upozorenje smatra primljenim."
+      ]
+    },
+    {
+      "id": "raskid",
+      "title": "Raskid posle isteka roka",
+      "summary": "Raskid je moguć tek kada povreda nije otklonjena u dodatnom roku iz prethodnog člana.",
+      "why_it_matters": "Klauzula o raskidu zavisi od prethodnog postupka, pa se ne može čitati izolovano.",
+      "source_refs": [
+        {
+          "label": "Član 7.2",
+          "location": "strana 3",
+          "quote": "Ako povreda nije otklonjena u roku iz člana 7.1, druga strana može raskinuti ugovor pisanim obaveštenjem."
+        }
+      ],
+      "details": [
+        "Pravo na raskid je formulisano kao mogućnost, ne kao automatska posledica.",
+        "I raskid se saopštava pisanim putem."
+      ],
+      "consequences": [
+        "Neotklonjena povreda posle osam dana otvara mogućnost raskida."
+      ],
+      "uncertainties": [
+        "Primer ne uređuje posledice raskida za već izvršene usluge."
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "from": "otklanjanje-povrede",
+      "to": "raskid",
+      "label": "prethodni uslov",
+      "source_refs": ["Član 7.1", "Član 7.2"]
+    },
+    {
+      "from": "placanje",
+      "to": "otklanjanje-povrede",
+      "label": "kašnjenje može biti povreda",
+      "source_refs": ["Član 4", "Član 7.1"]
+    }
+  ],
+  "what_if": [
+    {
+      "id": "dani-kasnjenja",
+      "kind": "number",
+      "title": "Cena kašnjenja",
+      "prompt": "Koliko dana kasni uplata?",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "base_value": 3,
+      "unit": "dana",
+      "result_unit": "RSD dodatnog troška",
+      "factor": 500,
+      "offset": 0,
+      "precision": 0,
+      "source_refs": ["Član 4"]
+    },
+    {
+      "id": "postupak-raskida",
+      "kind": "choice",
+      "title": "Postupak pre raskida",
+      "prompt": "Koji korak je već preduzet?",
+      "choices": [
+        {
+          "label": "Samo usmeno upozorenje",
+          "outcome": "Nije ispunjen zahtev iz primera da upozorenje bude pisano.",
+          "source_refs": ["Član 7.1"]
+        },
+        {
+          "label": "Pisano upozorenje, rok traje",
+          "outcome": "Treba sačekati istek osmodnevnog roka i proveriti da li je povreda otklonjena.",
+          "source_refs": ["Član 7.1", "Član 7.2"]
+        },
+        {
+          "label": "Rok istekao, povreda traje",
+          "outcome": "Primer otvara mogućnost raskida pisanim obaveštenjem.",
+          "source_refs": ["Član 7.2"]
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "id": "q1",
+      "question": "Naručilac kasni tri započeta dana. Koliki dodatni trošak izričito podržava primer?",
+      "options": ["500 RSD", "1.500 RSD", "60.000 RSD", "Ugovor se automatski raskida"],
+      "correct_index": 1,
+      "explanation": "Član 4 određuje 500 RSD za svaki započeti dan, pa su tri dana 1.500 RSD.",
+      "source_refs": ["Član 4"]
+    },
+    {
+      "id": "q2",
+      "question": "Koji postupak primer zahteva pre raskida zbog otklonjive povrede?",
+      "options": ["Trenutan raskid", "Usmeni poziv", "Pisano upozorenje i osam dana za otklanjanje", "Samo neplaćena faktura"],
+      "correct_index": 2,
+      "explanation": "Član 7.1 traži pisano upozorenje i osmodnevni rok, a član 7.2 vezuje raskid za njegov neuspešan istek.",
+      "source_refs": ["Član 7.1", "Član 7.2"]
+    }
+  ],
+  "open_questions": [
+    "Kada se pisano upozorenje smatra primljenim?",
+    "Da li se rok koji ističe neradnim danom pomera?",
+    "Postoji li ograničenje ukupne naknade za kašnjenje?"
+  ]
+}
