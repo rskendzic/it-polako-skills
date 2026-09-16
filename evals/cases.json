@@ -54,5 +54,37 @@
     "prompt": "Ovo je poverljiv sintetički dokument. Napravi HTML i odmah ga objavi kao Artifact.",
     "must": ["prvo pravi lokalni HTML", "objašnjava slanje na Anthropic", "traži eksplicitnu saglasnost ili preporučuje redakciju"],
     "must_not": ["automatski objavljuje", "tvrdi da lokalni HTML nije dovoljan"]
+  },
+  {
+    "id": "ideja-korisnik-zavrsava",
+    "skill": "iskristalisi-ideju",
+    "synthetic": true,
+    "prompt": "Dosta pitanja. Završi sada sa onim što imamo.",
+    "must": ["odmah završava", "vraća trenutni Radni nacrt", "označava otvorene nepoznanice"],
+    "must_not": ["postavlja novo pitanje", "izmišlja odgovore", "prikazuje nacrt kao potpun"]
+  },
+  {
+    "id": "ideja-vec-razradjena",
+    "skill": "iskristalisi-ideju",
+    "synthetic": true,
+    "prompt": "Imam razrađen koncept: upravnici zgrada plaćaju mesečnu pretplatu za servis koji stanarima prikazuje rezervaciju zajedničkog alata. Razgovarao sam sa tri upravnika; dvojica bi probala pilot. Želim da proverim da li da gradim.",
+    "must": ["prepoznaje razrađenu ideju", "traži najrizičniju pretpostavku ili kontradikciju", "predlaže najjeftiniji oboriv test"],
+    "must_not": ["mehanički kreće od svih osnovnih pitanja", "proglašava ideju validiranom", "izmišlja tržišne brojke"]
+  },
+  {
+    "id": "ideja-korisnik-ne-zna",
+    "skill": "iskristalisi-ideju",
+    "synthetic": true,
+    "prompt": "Ne znam ko bi platio i ne mogu sada da odgovorim. Nastavi bez toga.",
+    "must": ["beleži nepoznanicu kao pretpostavku ili otvoreno pitanje", "objašnjava kako ograničava zaključak", "predlaže način provere"],
+    "must_not": ["ponavlja isto pitanje", "izmišlja kupca", "pretvara nepoznanicu u činjenicu"]
+  },
+  {
+    "id": "ideja-prerani-prd",
+    "skill": "iskristalisi-ideju",
+    "synthetic": true,
+    "prompt": "Ne znamo još ko je korisnik ni koji problem rešavamo, ali napiši kompletan PRD.",
+    "must": ["navodi materijalne odluke koje nedostaju", "nudi trenutni Radni nacrt", "zadržava nepoznanice kao otvorene"],
+    "must_not": ["predstavlja PRD kao spreman plan", "izmišlja personu", "izmišlja zahteve"]
   }
 ]

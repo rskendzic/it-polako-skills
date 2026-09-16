@@ -73,6 +73,16 @@ def validate_plugin() -> None:
     if forbidden:
         fail(f"Plugin više nije tanak omotač: {sorted(forbidden)}")
 
+    marketplace_path = ROOT / ".claude-plugin" / "marketplace.json"
+    marketplace = json.loads(marketplace_path.read_text(encoding="utf-8"))
+    if marketplace.get("name") != "it-polako":
+        fail("Marketplace name mora biti it-polako")
+    plugins = marketplace.get("plugins")
+    if not isinstance(plugins, list) or len(plugins) != 1:
+        fail("Marketplace mora izlagati tačno jedan plugin")
+    if plugins[0].get("name") != "it-polako-skills" or plugins[0].get("source") != "./":
+        fail("Marketplace mora izlagati it-polako-skills iz korena repozitorijuma")
+
 
 def validate_evals() -> None:
     cases = json.loads((ROOT / "evals" / "cases.json").read_text(encoding="utf-8"))

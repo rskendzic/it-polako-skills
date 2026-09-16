@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "it-polako",
+  "owner": {
+    "name": "IT Polako",
+    "url": "https://skendzic.dev"
+  },
+  "description": "Srpski Agent Skills za razumevanje stvarnih izvora i razradu ideja.",
+  "plugins": [
+    {
+      "name": "it-polako-skills",
+      "source": "./",
+      "description": "Pojasni stvarne izvore i iskristališi nedorečene ideje na srpskom.",
+      "category": "productivity",
+      "keywords": ["serbian", "understanding", "ideas", "productivity"]
+    }
+  ]
+}

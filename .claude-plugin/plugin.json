@@ -1,7 +1,8 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "it-polako-skills",
   "displayName": "IT Polako Skills",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Srpski Agent Skills za razjašnjavanje ideja i razumevanje stvarnih artefakata.",
   "author": {
     "name": "IT Polako",

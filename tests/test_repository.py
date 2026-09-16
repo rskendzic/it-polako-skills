@@ -47,6 +47,18 @@ class RepositoryContractTests(unittest.TestCase):
         self.assertNotIn("hooks", manifest)
         self.assertNotIn("mcpServers", manifest)
 
+    def test_claude_marketplace_exposes_the_plugin(self) -> None:
+        marketplace = json.loads(
+            (ROOT / ".claude-plugin" / "marketplace.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        self.assertEqual(marketplace["name"], "it-polako")
+        self.assertEqual(marketplace["owner"]["name"], "IT Polako")
+        self.assertEqual(len(marketplace["plugins"]), 1)
+        self.assertEqual(marketplace["plugins"][0]["name"], "it-polako-skills")
+        self.assertEqual(marketplace["plugins"][0]["source"], "./")
+
     def test_each_skill_has_codex_metadata(self) -> None:
         for slug in EXPECTED_SKILLS:
             metadata = ROOT / "skills" / slug / "agents" / "openai.yaml"
@@ -54,6 +66,59 @@ class RepositoryContractTests(unittest.TestCase):
             self.assertIn("display_name:", text)
             self.assertIn("short_description:", text)
             self.assertIn("default_prompt:", text)
+
+    def test_pojasni_mi_requires_explicit_codex_invocation(self) -> None:
+        metadata = (
+            ROOT / "skills" / "pojasni-mi" / "agents" / "openai.yaml"
+        ).read_text(encoding="utf-8")
+        self.assertIn("allow_implicit_invocation: false", metadata)
+
+    def test_iskristalisi_ideju_handles_early_stop_and_ready_ideas(self) -> None:
+        text = (ROOT / "skills" / "iskristalisi-ideju" / "SKILL.md").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("traži završetak", text)
+        self.assertIn("već dovoljno razrađena", text)
+        self.assertIn("ne prolazi mehanički", text)
+
+    def test_radni_nacrt_contains_a_synthetic_example(self) -> None:
+        text = (
+            ROOT
+            / "skills"
+            / "iskristalisi-ideju"
+            / "references"
+            / "radni-nacrt.md"
+        ).read_text(encoding="utf-8")
+        self.assertIn("Sintetički primer", text)
+        self.assertIn("Otvoreno pitanje", text)
+
+    def test_readme_has_copy_paste_install_and_run_examples(self) -> None:
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        required = (
+            "npx skills@latest add rskendzic/it-polako-skills",
+            "/plugin marketplace add rskendzic/it-polako-skills",
+            "/plugin install it-polako-skills@it-polako",
+            "/it-polako-skills:pojasni-mi",
+            "/it-polako-skills:iskristalisi-ideju",
+            "$pojasni-mi",
+            "$iskristalisi-ideju",
+            "mapa-razumevanja.html",
+        )
+        for fragment in required:
+            with self.subTest(fragment=fragment):
+                self.assertIn(fragment, readme)
+
+    def test_new_idea_edge_case_evals_exist(self) -> None:
+        cases = json.loads((ROOT / "evals" / "cases.json").read_text(encoding="utf-8"))
+        ids = {case["id"] for case in cases}
+        self.assertTrue(
+            {
+                "ideja-korisnik-zavrsava",
+                "ideja-vec-razradjena",
+                "ideja-korisnik-ne-zna",
+                "ideja-prerani-prd",
+            }.issubset(ids)
+        )
 
     def test_pojasni_mi_keeps_modes_internal(self) -> None:
         text = (ROOT / "skills" / "pojasni-mi" / "SKILL.md").read_text(
@@ -64,6 +129,8 @@ class RepositoryContractTests(unittest.TestCase):
         self.assertNotIn("Uđi dublje", text)
         self.assertIn("eksplicit", text.lower())
         self.assertIn("lokal", text.lower())
+        self.assertIn("putanju do direktorijuma ovog skilla", text)
+        self.assertIn("apsolutnu putanju", text)
 
     def test_pojasni_mi_has_type_specific_rules(self) -> None:
         refs = ROOT / "skills" / "pojasni-mi" / "references"

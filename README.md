@@ -1,44 +1,171 @@
 # IT Polako Skills
 
-Agent Skills na srpskom, latinicom i ekavicom. Jedan repozitorijum, dva javna skilla, ista kanonska pravila za Claude Code i Codex.
+Dva Agent Skilla na srpskom, latinicom i ekavicom:
+
+- **Iskristališi ideju** pretvara nedorečenu ili već razrađenu ideju u proverljiv Radni nacrt i sledeći test.
+- **Pojasni mi** pretvara konkretan izvor u samostalnu interaktivnu HTML Mapu razumevanja.
+
+Skill nije poseban program koji pokrećete u terminalu. Instalirate ga u Claude Code, Codex ili drugi podržani agent, a zatim ga pozovete u razgovoru.
+
+## Instalacija
+
+Izaberite **jedan** način instalacije po agentu. Za Claude Code koristite plugin **ili** `skills` CLI, ne oba. Istovremeno možete koristiti Claude plugin za Claude Code i `skills` CLI za Codex.
+
+### Claude Code plugin
+
+U Claude Code-u pokrenite:
+
+```text
+/plugin marketplace add rskendzic/it-polako-skills
+/plugin install it-polako-skills@it-polako
+```
+
+Posle instalacije pokrenite `/reload-plugins` ako Claude Code to zatraži.
+
+### Codex i drugi Agent Skills klijenti
+
+Interaktivna instalacija:
+
+```bash
+npx skills@latest add rskendzic/it-polako-skills
+```
+
+CLI zatim nudi izbor skilla, agenta i project/global instalacije.
+
+Oba skilla globalno za Codex, bez dodatnih pitanja:
+
+```bash
+npx skills@latest add rskendzic/it-polako-skills \
+  --skill '*' \
+  --agent codex \
+  --global \
+  --yes
+```
+
+Samo jedan skill:
+
+```bash
+npx skills@latest add rskendzic/it-polako-skills \
+  --skill pojasni-mi \
+  --agent codex \
+  --global \
+  --yes
+```
+
+Za Claude Code kroz otvoreni Agent Skills format umesto plugin-a zamenite `codex` sa `claude-code`.
+
+### Lokalni razvoj Claude plugin-a
+
+```bash
+git clone https://github.com/rskendzic/it-polako-skills.git
+cd it-polako-skills
+claude --plugin-dir .
+```
+
+## Kako se koristi
+
+### Claude Code
+
+```text
+/it-polako-skills:pojasni-mi ugovor.pdf
+
+Moram da razumem obaveze, rokove, uslove raskida i šta treba da proverim pre potpisivanja.
+```
+
+```text
+/it-polako-skills:iskristalisi-ideju
+
+Želim servis koji pomaže malim firmama da prate ugovorne obaveze, ali još ne znam ko je prvi korisnik niti šta je najmanji proizvod.
+```
+
+### Codex
+
+```text
+$pojasni-mi
+
+Pojasni mi ugovor.pdf. Moram da odlučim da li smem da ga potpišem i koje tačke zahtevaju stručnu proveru.
+```
+
+```text
+$iskristalisi-ideju
+
+Želim servis za praćenje ugovornih obaveza malih firmi.
+```
+
+Codex može automatski da izabere `iskristalisi-ideju`. `pojasni-mi` zahteva eksplicitno `$pojasni-mi`, jer čita konkretan izvor i pravi fajl.
+
+## Šta dobijate
+
+### Iskristališi ideju
+
+Agent vodi razgovor jednim materijalnim pitanjem odjednom i održava **Radni nacrt** sa:
+
+- ishodom, problemom i korisnikom;
+- činjenicama i pretpostavkama;
+- odlukama, odbačenim opcijama i kontradikcijama;
+- granicama, rizicima i otvorenim pitanjima;
+- najjeftinijim testom koji može da obori ključnu pretpostavku.
+
+Ako kažete da je dosta, agent odmah vraća trenutno stanje i označava šta je ostalo otvoreno.
+
+### Pojasni mi
+
+Agent pravi:
+
+```text
+mapa-razumevanja.html
+```
+
+Fajl se podrazumevano čuva u trenutnom radnom direktorijumu, odnosno u folderu koji ste dali Cowork-u. Agent mora da prijavi tačnu putanju. HTML:
+
+- radi lokalno, bez servera i interneta;
+- odvaja izvor od tumačenja;
+- vezuje tvrdnje za stranu, odeljak, ćeliju, fajl ili drugi locirajući podatak;
+- sadrži `Idi u detalje`, bezbedan what-if kada je primenljiv i `Proveri me`;
+- ne koristi udaljene biblioteke ni analitiku.
+
+Renderer koristi Python standardnu biblioteku, ali ga pokreće agent, ne korisnik. Ako izvršavanje koda nije dostupno, agent mora da prijavi blokadu umesto da napravi nevalidiran HTML.
+
+Claude Artifact je opcioni kanal isporuke. Objavljivanje se radi samo uz eksplicitnu saglasnost, jer se sadržaj šalje na Anthropic servere. Lokalni HTML je osnovni rezultat.
+
+## Probajte primer bez agenta
+
+Repo sadrži potpuno sintetički ugovor i očekivani HTML:
+
+- [ulazni JSON](examples/pojasni-mi/sinteticki-ugovor.json)
+- [generisana Mapa razumevanja](examples/pojasni-mi/mapa-razumevanja.html)
+
+Ponovno generisanje primera:
+
+```bash
+git clone https://github.com/rskendzic/it-polako-skills.git
+cd it-polako-skills
+python3 skills/pojasni-mi/scripts/render_map.py \
+  examples/pojasni-mi/sinteticki-ugovor.json \
+  mapa-razumevanja.html
+```
+
+Otvorite `mapa-razumevanja.html` dvoklikom ili direktno iz pregledača.
 
 ## Skillovi
 
 ### Iskristališi ideju
 
-Istrajno pretvara nedorečenu ideju u proverljiv **Radni nacrt**: činjenice, pretpostavke, odluke, kontradikcije, rizici, otvorena pitanja i najjeftiniji sledeći test.
+Koristi se za proizvod, funkciju, sadržaj, proces ili eksperiment. Ne izmišlja persone, tržište ili brojke i ne proglašava ideju validiranom samo zato što je razjašnjena.
 
 ### Pojasni mi
 
-Od konkretnog ugovora, tabele, koda, dokumenta, URL-a ili dijagrama pravi samostalnu interaktivnu HTML **Mapu razumevanja**. Tvrdnje su vezane za izvor, a provera meri praktičnu primenu.
+Koristi se samo uz konkretan ugovor, tabelu, CSV/XLSX, kod, repozitorijum, PDF/Word dokument, URL, sliku, šemu ili dijagram i jasan cilj razumevanja ili odluke.
 
 `Idi u detalje` i `Proveri me` su režimi unutar `Pojasni mi`, ne posebni skillovi.
-
-## Šta Pojasni mi pravi
-
-Podrazumevani rezultat je jedan lokalni `mapa-razumevanja.html`:
-
-- radi bez interneta;
-- nema udaljene biblioteke ni analitiku;
-- odvaja izvor od tumačenja;
-- prikazuje odnose i posledice;
-- podržava bezbedan what-if;
-- ima praktičan kviz `Proveri me`;
-- može opciono da se objavi kao Claude Artifact, ali samo uz eksplicitnu saglasnost.
-
-Primer je napravljen od potpuno sintetičkog ugovora:
-
-```bash
-python3 skills/pojasni-mi/scripts/render_map.py \
-  examples/pojasni-mi/sinteticki-ugovor.json \
-  examples/pojasni-mi/mapa-razumevanja.html
-```
 
 ## Arhitektura
 
 ```text
 it-polako-skills/
-├── .claude-plugin/plugin.json       # tanak Claude Code omotač
+├── .claude-plugin/
+│   ├── marketplace.json             # Claude Code distribucija
+│   └── plugin.json                  # tanak Claude Code omotač
 ├── skills/
 │   ├── iskristalisi-ideju/
 │   │   ├── SKILL.md                 # kanonsko ponašanje
@@ -49,49 +176,35 @@ it-polako-skills/
 │       ├── agents/openai.yaml       # Codex/ChatGPT prikaz
 │       ├── references/
 │       └── scripts/render_map.py
-├── examples/                        # sintetički primeri
+├── examples/                        # samo sintetički primeri
 ├── evals/                           # obavezna i zabranjena ponašanja
 └── tests/
 ```
 
-Jezgro nije vezano za jedan model. `.claude-plugin/plugin.json` distribuira iste skillove u Claude Code-u, a `agents/openai.yaml` dodaje OpenAI prikaz i podrazumevani prompt. Nema kopirane druge implementacije.
+Kanonska pravila su provider-neutralna. Claude plugin i `agents/openai.yaml` su samo distribucioni adapteri i metapodaci.
 
-## Claude Code
-
-Za lokalni razvoj učitaj ceo repozitorijum kao plugin:
-
-```bash
-claude --plugin-dir /putanja/do/it-polako-skills
-```
-
-Claude Code otkriva oba direktorijuma u `skills/`. Lokalni HTML je uvek osnovni izlaz. Ako je Artifact alat dostupan, objavljivanje je poseban, opcioni korak.
-
-## Codex
-
-Instaliraj svaki skill iz GitHub repozitorijuma pomoću `$skill-installer`, ili kopiraj/simlinkuj direktorijume u korisnički katalog:
-
-```bash
-mkdir -p ~/.agents/skills
-ln -s /putanja/do/it-polako-skills/skills/iskristalisi-ideju ~/.agents/skills/iskristalisi-ideju
-ln -s /putanja/do/it-polako-skills/skills/pojasni-mi ~/.agents/skills/pojasni-mi
-```
-
-Codex koristi isti `SKILL.md`. Claude-specifični Artifact korak se preskače, dok lokalni HTML ostaje isti.
-
-## Provera
+## Razvoj i provera
 
 ```bash
 python3 -m unittest discover -s tests -v
 python3 scripts/validate_repo.py
+uvx --from skills-ref agentskills validate skills/iskristalisi-ideju
+uvx --from skills-ref agentskills validate skills/pojasni-mi
 ```
 
-Repo sadrži spreman GitHub Actions šablon u `ci/github-actions.yml`. Za aktivaciju ga kopirajte u `.github/workflows/ci.yml`; credential koji obavlja push mora imati dozvolu za workflow fajlove.
+Claude marketplace i plugin možete proveriti komandom:
 
-Repo ima sintetičke eval slučajeve. Ne stavljajte privatne ugovore, podatke, kod ili slike u `examples/` i `evals/`.
+```bash
+claude plugin validate .
+```
+
+GitHub Actions šablon je u `ci/github-actions.yml`. Da bi bio aktivan, kopirajte ga u `.github/workflows/ci.yml`. Credential kojim šaljete tu promenu mora imati GitHub `workflow` dozvolu.
+
+Primeri i evalovi moraju ostati sintetički. Ne dodajte privatne ugovore, poslovne podatke, kod ili slike.
 
 ## Pozicioniranje
 
-Ovaj projekat ne tvrdi da je prvi interaktivni explainer ili prvi skill za razjašnjavanje ideja. Postoje srodni alati. Vrednost ovde je srpski podrazumevani jezik, prenosiv Agent Skills format, stroga sledljivost prema stvarnom izvoru i provera operativnog razumevanja.
+Projekat ne tvrdi da je prvi interaktivni explainer ili prvi skill za razjašnjavanje ideja. Vrednost je srpski podrazumevani jezik, prenosiv Agent Skills format, sledljivost prema stvarnom izvoru i provera praktičnog razumevanja.
 
 ## Licenca
 

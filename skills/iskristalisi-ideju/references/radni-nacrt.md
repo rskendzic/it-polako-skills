@@ -58,3 +58,37 @@ Poređaj po tome koliko odgovor može promeniti odluku, ne po tome koliko je lak
 - signal za nastavak;
 - signal za promenu ili odustajanje;
 - vlasnik i rok, samo ako su poznati.
+
+## Sintetički primer
+
+Ovo je skraćen, namerno nedovršen primer. Ne kopiraj njegove podatke u drugi nacrt.
+
+### Ishod
+
+Odlučiti da li komšijama u jednoj zgradi treba jednostavan način za pozajmljivanje alata.
+
+### Činjenice
+
+- Korisnik je lično pozajmio bušilicu dvojici komšija u prethodnih šest meseci.
+
+### Pretpostavke
+
+- Tvrdnja: problem se ponavlja kod dovoljno stanara.
+- Posledica ako je pogrešna: posebna aplikacija nema opravdanje.
+- Način provere: razgovor sa deset stanara iz dve zgrade.
+- Status: neproverena.
+
+### Odluke
+
+- Prvi test neće uključivati izradu aplikacije.
+
+### Otvorena pitanja
+
+- Otvoreno pitanje: da li su poverenje i odgovornost za oštećenje važniji problem od pronalaženja alata?
+
+### Sledeći test
+
+- Najrizičnija pretpostavka: stanari dovoljno često traže alat koji nemaju.
+- Test: deset kratkih razgovora uz beleženje poslednjeg stvarnog slučaja.
+- Signal za nastavak: najmanje četvoro navodi konkretan slučaj iz poslednja tri meseca.
+- Signal za odustajanje: odgovori ostanu hipotetički ili se problem nije pojavio.

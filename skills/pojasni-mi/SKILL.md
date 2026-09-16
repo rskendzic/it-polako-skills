@@ -1,10 +1,10 @@
 ---
 name: pojasni-mi
-description: Pretvara konkretan ugovor, tabelu, kod, dokument, URL ili dijagram u sledljivu interaktivnu HTML Mapu razumevanja. Koristi kada korisnik mora nešto da razume, odluči ili uradi na osnovu stvarnog izvora.
+description: Pretvara konkretan ugovor, tabelu, kod, dokument, URL ili dijagram u sledljivu interaktivnu HTML Mapu razumevanja. Koristi samo kada postoji stvarni izvor i korisnik mora nešto da razume, odluči ili uradi; ne koristi za opšta pitanja bez konkretnog izvora.
 license: MIT
 metadata:
   author: IT Polako
-  version: "0.1.0"
+  version: "0.2.0"
   language: sr-Latn-RS
 ---
 
@@ -40,9 +40,11 @@ Napravi jedan lokalni fajl `mapa-razumevanja.html` koji:
    - [dokumenti i dijagrami](references/dokumenti-i-dijagrami.md)
 4. **Napravi model mape.** Prati [format mape](references/format-mape.md). Svaka sekcija mora imati najmanje jednu `source_refs` stavku.
 5. **Proveri vernost.** Odvoji ono što izvor kaže od zaključka, neizvesnosti i nedostajućeg podatka. Ukloni ili označi tvrdnju koju ne možeš da vežeš za izvor.
-6. **Renderuj HTML.** Pokreni `scripts/render_map.py <ulaz.json> <izlaz.html>` iz direktorijuma ovog skilla. Završni izlaz mora biti jedan samostalni HTML fajl.
+6. **Renderuj HTML.** Razreši putanju do direktorijuma ovog skilla i dostupnim Python 3 interpreterom pokreni njegov `scripts/render_map.py`. Prosledi apsolutnu putanju do ulaznog JSON-a i apsolutnu putanju do `mapa-razumevanja.html` u korisnikovom trenutnom radnom direktorijumu. Ti izvršavaš komandu; korisnik ne mora da koristi terminal. Završni izlaz mora biti jedan samostalni HTML fajl.
 7. **Otvori i proveri.** Proveri konzolu, navigaciju, `Idi u detalje`, what-if i `Proveri me`. Ne prijavljuj uspeh bez stvarnog otvaranja kada pregledač postoji.
 8. **Ponudi objavljivanje odvojeno.** Lokalni HTML je završen rezultat. Claude Artifact je opcioni kanal isporuke, nikada preduslov.
+
+Ako Python ili izvršavanje koda nisu dostupni, prijavi tačnu blokadu. Ne generiši HTML ručno i ne predstavljaj ga kao ekvivalent validiranom izlazu renderer-a.
 
 ## Idi u detalje
 

@@ -1,6 +1,6 @@
 interface:
   display_name: "Iskristališi ideju"
   short_description: "Pretvori nedorečenu ideju u proverljiv radni nacrt"
-  default_prompt: "Upotrebi $iskristalisi-ideju da istrajno razjasniš ovu ideju i napraviš Radni nacrt na srpskom."
+  default_prompt: "Upotrebi $iskristalisi-ideju. Opiši ideju kako trenutno umeš, čak i ako je nejasna ili nedorečena. Razjasni je korak po korak i napravi Radni nacrt na srpskom."
 policy:
   allow_implicit_invocation: true

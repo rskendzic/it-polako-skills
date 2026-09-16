@@ -1,6 +1,6 @@
 interface:
   display_name: "Pojasni mi"
   short_description: "Napravi sledljivu interaktivnu Mapu razumevanja"
-  default_prompt: "Upotrebi $pojasni-mi da od ovog izvora napraviš samostalnu interaktivnu HTML Mapu razumevanja na srpskom."
+  default_prompt: "Upotrebi $pojasni-mi. Dodaj konkretan izvor i napiši šta moraš da razumeš, odlučiš ili uradiš. Napravi samostalnu interaktivnu HTML Mapu razumevanja na srpskom."
 policy:
-  allow_implicit_invocation: true
+  allow_implicit_invocation: false
