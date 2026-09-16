@@ -27,7 +27,7 @@ Posle instalacije pokrenite `/reload-plugins` ako Claude Code to zatraži.
 Interaktivna instalacija:
 
 ```bash
-npx skills@latest add rskendzic/it-polako-skills
+npx --yes skills@1.5.26 add rskendzic/it-polako-skills
 ```
 
 CLI zatim nudi izbor skilla, agenta i project/global instalacije.
@@ -35,7 +35,7 @@ CLI zatim nudi izbor skilla, agenta i project/global instalacije.
 Oba skilla globalno za Codex, bez dodatnih pitanja:
 
 ```bash
-npx skills@latest add rskendzic/it-polako-skills \
+npx --yes skills@1.5.26 add rskendzic/it-polako-skills \
   --skill '*' \
   --agent codex \
   --global \
@@ -45,7 +45,7 @@ npx skills@latest add rskendzic/it-polako-skills \
 Samo jedan skill:
 
 ```bash
-npx skills@latest add rskendzic/it-polako-skills \
+npx --yes skills@1.5.26 add rskendzic/it-polako-skills \
   --skill pojasni-mi \
   --agent codex \
   --global \
@@ -188,8 +188,8 @@ Kanonska pravila su provider-neutralna. Claude plugin i `agents/openai.yaml` su 
 ```bash
 python3 -m unittest discover -s tests -v
 python3 scripts/validate_repo.py
-uvx --from skills-ref agentskills validate skills/iskristalisi-ideju
-uvx --from skills-ref agentskills validate skills/pojasni-mi
+uvx --from skills-ref==0.1.1 agentskills validate skills/iskristalisi-ideju
+uvx --from skills-ref==0.1.1 agentskills validate skills/pojasni-mi
 ```
 
 Claude marketplace i plugin možete proveriti komandom:

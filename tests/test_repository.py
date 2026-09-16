@@ -95,7 +95,7 @@ class RepositoryContractTests(unittest.TestCase):
     def test_readme_has_copy_paste_install_and_run_examples(self) -> None:
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         required = (
-            "npx skills@latest add rskendzic/it-polako-skills",
+            "npx --yes skills@1.5.26 add rskendzic/it-polako-skills",
             "/plugin marketplace add rskendzic/it-polako-skills",
             "/plugin install it-polako-skills@it-polako",
             "/it-polako-skills:pojasni-mi",
@@ -107,6 +107,8 @@ class RepositoryContractTests(unittest.TestCase):
         for fragment in required:
             with self.subTest(fragment=fragment):
                 self.assertIn(fragment, readme)
+        self.assertNotIn("skills@latest", readme)
+        self.assertIn("--from skills-ref==0.1.1", readme)
 
     def test_new_idea_edge_case_evals_exist(self) -> None:
         cases = json.loads((ROOT / "evals" / "cases.json").read_text(encoding="utf-8"))
