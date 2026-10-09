@@ -13,7 +13,7 @@ from typing import NoReturn
 
 
 ROOT = Path(__file__).resolve().parents[1]
-EXPECTED_SKILLS = {"iskristalisi-ideju", "pojasni-mi"}
+EXPECTED_SKILLS = {"iskristalisi-ideju", "pojasni-mi", "it-polako-montaza"}
 NAME_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 FRONTMATTER_PATTERN = re.compile(r"^---\n(.*?)\n---\n(.+)$", re.DOTALL)
 
@@ -40,7 +40,7 @@ def validate_skills() -> None:
     skill_files = list((ROOT / "skills").glob("*/SKILL.md"))
     found = {path.parent.name for path in skill_files}
     if found != EXPECTED_SKILLS:
-        fail(f"Očekivana su tačno dva skilla {sorted(EXPECTED_SKILLS)}, pronađeno {sorted(found)}")
+        fail(f"Očekivani su tačno skillovi {sorted(EXPECTED_SKILLS)}, pronađeno {sorted(found)}")
     for path in skill_files:
         values, body = parse_frontmatter(path)
         name = values.get("name", "")
@@ -102,6 +102,21 @@ def validate_evals() -> None:
             fail(f"Eval mora imati must i must_not: {case_id}")
 
 
+def validate_hlg_helper() -> None:
+    helper = ROOT / "skills" / "it-polako-montaza" / "scripts" / "hlg_boje.py"
+    result = subprocess.run(
+        [sys.executable, str(helper), "boja", "#FFFFFF", "#FBD800"],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if result.returncode != 0:
+        fail(f"HLG pomoćnik je pukao: {result.stderr.strip()}")
+    if "(191, 191, 191)" not in result.stdout or "(185, 176, 65)" not in result.stdout:
+        fail(f"HLG pomoćnik vraća neočekivane vrednosti: {result.stdout.strip()}")
+
+
 def validate_rendering() -> None:
     renderer = ROOT / "skills" / "pojasni-mi" / "scripts" / "render_map.py"
     examples = list((ROOT / "examples" / "pojasni-mi").glob("*.json"))
@@ -143,11 +158,12 @@ def main() -> int:
         validate_skills()
         validate_plugin()
         validate_evals()
+        validate_hlg_helper()
         validate_rendering()
     except (OSError, json.JSONDecodeError, ValueError) as error:
         print(f"Puklo je: {error}", file=sys.stderr)
         return 1
-    print("Prolazi: 2 skilla, plugin, Codex metapodaci, evalovi i offline HTML.")
+    print("Prolazi: 3 skilla, plugin, Codex metapodaci, evalovi, HLG pomoćnik i offline HTML.")
     return 0
 
 
