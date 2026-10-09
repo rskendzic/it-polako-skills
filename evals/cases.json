@@ -86,5 +86,45 @@
     "prompt": "Ne znamo još ko je korisnik ni koji problem rešavamo, ali napiši kompletan PRD.",
     "must": ["navodi materijalne odluke koje nedostaju", "nudi trenutni Radni nacrt", "zadržava nepoznanice kao otvorene"],
     "must_not": ["predstavlja PRD kao spreman plan", "izmišlja personu", "izmišlja zahteve"]
+  },
+  {
+    "id": "montaza-dupli-pocetak",
+    "skill": "it-polako-montaza",
+    "synthetic": true,
+    "prompt": "U sintetičkom snimku govornik kaže „Ili dobijem”, zastane, pa ponovi „Ili dobijem ispravnu montažu”. Transkript sadrži frazu samo jednom. Napravi rez.",
+    "must": ["meri energiju zvuka na početku tejka", "otkriva ponovljen početak", "zadržava jedan neprekinut tejk"],
+    "must_not": ["veruje transkriptu da nema ponavljanja", "ostavlja frazu dva puta u rezu"]
+  },
+  {
+    "id": "montaza-naslov-referenca",
+    "skill": "it-polako-montaza",
+    "synthetic": true,
+    "prompt": "Dostavljeni su title.ttf, title-heavy.ttf i kadar objavljenog klipa sa žutim naslovom bez obrisa. Napravi naslov za novi klip.",
+    "must": ["meri naslov na referenci", "poredi naslov uporedo sa referencom pre rendera", "prijavljuje odstupanje oblika slova"],
+    "must_not": ["bira font po imenu fajla", "dodaje crni obris koji referenca nema", "uvodi drugu porodicu fontova bez odobrenja"]
+  },
+  {
+    "id": "montaza-dug-umetak",
+    "skill": "it-polako-montaza",
+    "synthetic": true,
+    "prompt": "Govornik devet sekundi objašnjava sadržaj sintetičkog dokumenta. Prikaži dokument u klipu.",
+    "must": ["koristi podeljen ekran sa govornikom ispod", "premešta titl u panel", "ulazi i izlazi tvrdim rezom na granici rečenice"],
+    "must_not": ["prekriva lice karticom celim trajanjem", "skalira snimak bez potrebe"]
+  },
+  {
+    "id": "montaza-hdr-izvoz",
+    "skill": "it-polako-montaza",
+    "synthetic": true,
+    "prompt": "Sintetički original je 2160×3840, 30 fps, HEVC 10-bit HLG. Izvezi završni klip.",
+    "must": ["pita pre konverzije", "čuva rezoluciju, fps i HLG", "mapira grafiku na HLG belu"],
+    "must_not": ["izvozi 1080p SDR bez odobrenja", "menja original"]
+  },
+  {
+    "id": "montaza-pomak-zvuka",
+    "skill": "it-polako-montaza",
+    "synthetic": true,
+    "prompt": "Audio tok sintetičkog MOV-a počinje na 0,26 s, a vremena reči potiču iz izvučenog WAV-a. Iseci rečenice.",
+    "must": ["dodaje pomak audio toka pre rezanja", "potvrđuje pomak merenjem"],
+    "must_not": ["seče po neispravljenim vremenima", "odseca kraj reči"]
   }
 ]

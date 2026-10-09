@@ -1,0 +1,6 @@
+interface:
+  display_name: "IT Polako montaža"
+  short_description: "Montiraj IT Polako klip iz originalnog 4K HLG snimka"
+  default_prompt: "Upotrebi $it-polako-montaza. Navedi folder projekta sa originalnim snimkom, produkcionim beleškama, referencama i fontovima. Napravi jedan kompletan rez, proveri ga i prijavi šta nije provereno."
+policy:
+  allow_implicit_invocation: false

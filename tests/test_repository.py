@@ -5,7 +5,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-EXPECTED_SKILLS = {"iskristalisi-ideju", "pojasni-mi"}
+EXPECTED_SKILLS = {"iskristalisi-ideju", "pojasni-mi", "it-polako-montaza"}
 
 
 def frontmatter(path: Path) -> dict[str, str]:
@@ -22,7 +22,7 @@ def frontmatter(path: Path) -> dict[str, str]:
 
 
 class RepositoryContractTests(unittest.TestCase):
-    def test_repository_contains_exactly_two_public_skills(self) -> None:
+    def test_repository_contains_exactly_the_public_skills(self) -> None:
         found = {
             path.parent.name
             for path in (ROOT / "skills").glob("*/SKILL.md")

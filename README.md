@@ -1,9 +1,10 @@
 # IT Polako Skills
 
-Dva Agent Skilla na srpskom, latinicom i ekavicom:
+Tri Agent Skilla na srpskom, latinicom i ekavicom:
 
 - **Iskristališi ideju** pretvara nedorečenu ili već razrađenu ideju u proverljiv Radni nacrt i sledeći test.
 - **Pojasni mi** pretvara konkretan izvor u samostalnu interaktivnu HTML Mapu razumevanja.
+- **IT Polako montaža** montira IT Polako klip od originalnog 4K HLG snimka do proverenog završnog fajla, u izgledu serijala.
 
 Skill nije poseban program koji pokrećete u terminalu. Instalirate ga u Claude Code, Codex ili drugi podržani agent, a zatim ga pozovete u razgovoru.
 
@@ -32,7 +33,7 @@ npx --yes skills@1.5.26 add rskendzic/it-polako-skills
 
 CLI zatim nudi izbor skilla, agenta i project/global instalacije.
 
-Oba skilla globalno za Codex, bez dodatnih pitanja:
+Svi skillovi globalno za Codex, bez dodatnih pitanja:
 
 ```bash
 npx --yes skills@1.5.26 add rskendzic/it-polako-skills \
@@ -78,6 +79,12 @@ Moram da razumem obaveze, rokove, uslove raskida i šta treba da proverim pre po
 Želim servis koji pomaže malim firmama da prate ugovorne obaveze, ali još ne znam ko je prvi korisnik niti šta je najmanji proizvod.
 ```
 
+```text
+/it-polako-skills:it-polako-montaza
+
+Montiraj klip iz ovog foldera. Original je u assets/source/, beleške u production-notes.md, reference u assets/style-reference/, fontovi u assets/fonts/.
+```
+
 ### Codex
 
 ```text
@@ -92,7 +99,13 @@ $iskristalisi-ideju
 Želim servis za praćenje ugovornih obaveza malih firmi.
 ```
 
-Codex može automatski da izabere `iskristalisi-ideju`. `pojasni-mi` zahteva eksplicitno `$pojasni-mi`, jer čita konkretan izvor i pravi fajl.
+```text
+$it-polako-montaza
+
+Montiraj klip iz ovog foldera i prijavi šta nije provereno.
+```
+
+Codex može automatski da izabere `iskristalisi-ideju`. `pojasni-mi` i `it-polako-montaza` zahtevaju eksplicitan poziv, jer čitaju konkretan izvor i prave fajl.
 
 ## Šta dobijate
 
@@ -128,6 +141,19 @@ Renderer koristi Python standardnu biblioteku, ali ga pokreće agent, ne korisni
 
 Claude Artifact je opcioni kanal isporuke. Objavljivanje se radi samo uz eksplicitnu saglasnost, jer se sadržaj šalje na Anthropic servere. Lokalni HTML je osnovni rezultat.
 
+### IT Polako montaža
+
+Agent pravi završni klip u izlaznom folderu projekta, u istoj rezoluciji, fps-u i HDR nameri kao original, osim ako odobrite drugačije. Usput:
+
+- pravi jedan transkript po rečima i ispravlja pomak audio toka;
+- otkriva ponovljene početke rečenica koje transkript sakrije;
+- meri naslov i titlove na referentnim kadrovima pre rendera;
+- duže umetke stavlja u podeljen ekran, sa govornikom ispod;
+- mapira grafiku u HLG i pravi SDR pregled kroz LUT;
+- proverava original, frejmove, spojeve, tokove i glasnoću, pa prijavljuje šta nije provereno.
+
+Potrebni su `ffmpeg` sa `libx265` i `zimg`, Python 3 sa Pillow-om i lokalni model za prepoznavanje govora. Pomoćnik `scripts/hlg_boje.py` koristi samo standardnu biblioteku.
+
 ## Probajte primer bez agenta
 
 Repo sadrži potpuno sintetički ugovor i očekivani HTML:
@@ -159,6 +185,10 @@ Koristi se samo uz konkretan ugovor, tabelu, CSV/XLSX, kod, repozitorijum, PDF/W
 
 `Idi u detalje` i `Proveri me` su režimi unutar `Pojasni mi`, ne posebni skillovi.
 
+### IT Polako montaža
+
+Koristi se samo uz originalni snimak, produkcione beleške ili scenario, vizuelne reference i fontove serijala. Ne piše scenario i ne objavljuje klip. Ako projekat ima sopstveni postupak montaže, on ima prednost.
+
 ## Arhitektura
 
 ```text
@@ -171,11 +201,16 @@ it-polako-skills/
 │   │   ├── SKILL.md                 # kanonsko ponašanje
 │   │   ├── agents/openai.yaml       # Codex/ChatGPT prikaz
 │   │   └── references/
-│   └── pojasni-mi/
+│   ├── pojasni-mi/
+│   │   ├── SKILL.md                 # kanonsko ponašanje
+│   │   ├── agents/openai.yaml       # Codex/ChatGPT prikaz
+│   │   ├── references/
+│   │   └── scripts/render_map.py
+│   └── it-polako-montaza/
 │       ├── SKILL.md                 # kanonsko ponašanje
 │       ├── agents/openai.yaml       # Codex/ChatGPT prikaz
-│       ├── references/
-│       └── scripts/render_map.py
+│       ├── references/              # izgled, transkript i rez, HLG, ograničeno okruženje
+│       └── scripts/hlg_boje.py
 ├── examples/                        # samo sintetički primeri
 ├── evals/                           # obavezna i zabranjena ponašanja
 └── tests/
@@ -190,6 +225,7 @@ python3 -m unittest discover -s tests -v
 python3 scripts/validate_repo.py
 uvx --from skills-ref==0.1.1 agentskills validate skills/iskristalisi-ideju
 uvx --from skills-ref==0.1.1 agentskills validate skills/pojasni-mi
+uvx --from skills-ref==0.1.1 agentskills validate skills/it-polako-montaza
 ```
 
 Claude marketplace i plugin možete proveriti komandom:
