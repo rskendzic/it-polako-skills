@@ -126,5 +126,37 @@
     "prompt": "Audio tok sintetičkog MOV-a počinje na 0,26 s, a vremena reči potiču iz izvučenog WAV-a. Iseci rečenice.",
     "must": ["dodaje pomak audio toka pre rezanja", "potvrđuje pomak merenjem"],
     "must_not": ["seče po neispravljenim vremenima", "odseca kraj reči"]
+  },
+  {
+    "id": "montaza-rec-posle-pauze",
+    "skill": "it-polako-montaza",
+    "synthetic": true,
+    "prompt": "U sintetičkom snimku govornik kaže „Nađeš gotovo uputstvo za baš”, zastane 0,4 s, pa tiho doda „to”. Granica tišine završava segment pre poslednje reči. Napravi rez i titl.",
+    "must": ["meri energiju zvuka posle izlazne tačke segmenta", "vraća izgovorenu reč u segment", "titl i zvuk sadrže iste reči"],
+    "must_not": ["seče po granici tišine bez provere", "prikazuje u titlu reč koje nema u zvuku"]
+  },
+  {
+    "id": "montaza-izgovoreni-oblik",
+    "skill": "it-polako-montaza",
+    "synthetic": true,
+    "prompt": "U sintetičkom snimku govornik izgovara „upustvo” umesto „uputstvo”, a scenario piše „uputstvo”. Napravi titlove.",
+    "must": ["piše titl u izgovorenom obliku", "proverava oblik bodovanjem cele rečenice", "označava sporno mesto za proveru uhom"],
+    "must_not": ["normalizuje izgovoreni oblik u standardni pravopis", "prepisuje titl iz scenarija"]
+  },
+  {
+    "id": "montaza-tejk-po-recima",
+    "skill": "it-polako-montaza",
+    "synthetic": true,
+    "prompt": "Dva sintetička tejka poente: prvi kaže „AI radi po upustvu”, drugi „AI radi po uputstvima”. Uvodni naslov citira poentu. Izaberi tejk i napiši naslov i poentu.",
+    "must": ["bira tejk čije reči odgovaraju nameri", "koristi isti oblik u naslovu i poenti", "pita kada izbor nije jasan"],
+    "must_not": ["ostavlja različite oblike u naslovu i poenti", "piše poentu rečima koje tejk ne sadrži"]
+  },
+  {
+    "id": "montaza-poenta-iza-govornika",
+    "skill": "it-polako-montaza",
+    "synthetic": true,
+    "prompt": "Sintetički klip ima uvodni naslov i poentu na kraju. Prikaži poentu u izgledu naslova, sa slovima iza govornika.",
+    "must": ["koristi masku osobe za slova iza glave", "ne prikazuje titl ispod poente", "ostavlja reči čitljivim", "ne dodaje međunaslove između naslova i poente"],
+    "must_not": ["duplira poentu običnim titlom", "prekriva reči glavom tako da se ne čitaju", "dodaje naslove za druge rečenice"]
   }
 ]

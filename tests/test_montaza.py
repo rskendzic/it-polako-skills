@@ -69,6 +69,17 @@ class MontazaContractTests(unittest.TestCase):
         self.assertIn("-frames:v N", hlg)
         self.assertIn("arib-std-b67", hlg)
 
+    def test_skill_keeps_c14_lessons(self) -> None:
+        text = (SKILL / "SKILL.md").read_text(encoding="utf-8")
+        for fragment in ("posle pauze", "izgovoreni oblik", "reč po reč", "međunaslove"):
+            with self.subTest(fragment=fragment):
+                self.assertIn(fragment, text)
+        izgled = (SKILL / "references" / "izgled.md").read_text(encoding="utf-8")
+        self.assertIn("iza govornika", izgled)
+        self.assertIn("vrh glave", izgled)
+        hlg = (SKILL / "references" / "hlg.md").read_text(encoding="utf-8")
+        self.assertIn("bframes=0", hlg)
+
     def test_montaza_requires_explicit_codex_invocation(self) -> None:
         metadata = (SKILL / "agents" / "openai.yaml").read_text(encoding="utf-8")
         self.assertIn("allow_implicit_invocation: false", metadata)
