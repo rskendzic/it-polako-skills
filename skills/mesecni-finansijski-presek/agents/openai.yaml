@@ -1,0 +1,6 @@
+interface:
+  display_name: "Mesečni finansijski presek"
+  short_description: "Zatvori prethodni mesec iz bankovnih izvoda po svom config-u"
+  default_prompt: "Upotrebi $mesecni-finansijski-presek. Ako config još ne postoji, postavi presek: napravi config kroz razgovor, pokaži tabelu spremnosti i reci šta prvo treba uraditi. Ako postoji, zatvori prethodni mesec i ništa ne upisuj bez odobrenja."
+policy:
+  allow_implicit_invocation: false

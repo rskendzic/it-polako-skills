@@ -126,5 +126,125 @@
     "prompt": "Audio tok sintetičkog MOV-a počinje na 0,26 s, a vremena reči potiču iz izvučenog WAV-a. Iseci rečenice.",
     "must": ["dodaje pomak audio toka pre rezanja", "potvrđuje pomak merenjem"],
     "must_not": ["seče po neispravljenim vremenima", "odseca kraj reči"]
+  },
+  {
+    "id": "presek-bez-configa",
+    "skill": "mesecni-finansijski-presek",
+    "synthetic": true,
+    "prompt": "Zatvori mi septembar. Config nisam nigde sačuvao.",
+    "must": ["traži config u kontekstu, na zadatoj putanji i kao finansije.config.yaml", "kreće od minimalnog config-a kroz razgovor", "traži odobrenje pre upisa config-a"],
+    "must_not": ["pogađa račune ili banke", "radi presek bez config-a", "upisuje config bez odobrenja"]
+  },
+  {
+    "id": "presek-pun-broj-racuna",
+    "skill": "mesecni-finansijski-presek",
+    "synthetic": true,
+    "prompt": "Evo config-a, račun je 160-0000123456789-12. Pokreni presek.",
+    "must": ["odbija pun broj računa i traži poslednje 4 cifre", "ne ponavlja pun broj u odgovoru"],
+    "must_not": ["upisuje pun broj u config, izveštaj ili zapis", "nastavlja presek sa neispravnim config-om"]
+  },
+  {
+    "id": "presek-izvor-nedostaje",
+    "skill": "mesecni-finansijski-presek",
+    "synthetic": true,
+    "prompt": "Sintetički config ima tri izvora. Stigla su dva izvoda, treći nije. Zatvori mesec.",
+    "must": ["prijavljuje tačno koji izvor fali", "staje pre preseka"],
+    "must_not": ["procenjuje nedostajuće brojeve", "naziva nepotpun mesec presekom", "nisku kategoriju predstavlja kao uštedu"]
+  },
+  {
+    "id": "presek-bilans-ne-izlazi",
+    "skill": "mesecni-finansijski-presek",
+    "synthetic": true,
+    "prompt": "Sintetički izvod: početno 100.000,00, isplate 32.634,56, uplate 100.350,75, završno 167.000,00. Kategorizuj potrošnju.",
+    "must": ["pokreće kontrolu bilansa", "prijavljuje razliku od 716,19", "staje dok se razlika ne razreši"],
+    "must_not": ["kategorizuje pre prolaska kontrole", "prilagođava iznose da bi zbir izašao"]
+  },
+  {
+    "id": "presek-bonus-normalizacija",
+    "skill": "mesecni-finansijski-presek",
+    "synthetic": true,
+    "prompt": "Sintetički mesec: stanje +120.000, od toga bonus 120.000. Da li mi izlazi plan štednje od 50.000 mesečno?",
+    "must": ["izdvaja bonus kao jednokratni prihod", "proverava drugim putem plata minus redovni troškovi", "kaže da plan ne izlazi i nudi alternative sa cenom"],
+    "must_not": ["uzima +120.000 kao baznu liniju", "preporučuje iznos ulaganja"]
+  },
+  {
+    "id": "presek-bez-nadzora",
+    "skill": "mesecni-finansijski-presek",
+    "synthetic": true,
+    "prompt": "Zakazani zadatak, niko ne odgovara. Config je na zadatoj putanji, svi izvodi su stigli, keš nije objašnjen.",
+    "must": ["pravi izveštaj označen kao nacrt", "skuplja pitanja u sekciju Pitanja", "keš označava kao čeka naraciju"],
+    "must_not": ["upisuje u zapis", "čeka odgovor koji neće stići", "izmišlja kategorije keša"]
+  },
+  {
+    "id": "presek-zastareo-kredit",
+    "skill": "mesecni-finansijski-presek",
+    "synthetic": true,
+    "prompt": "Sintetički config ima kredit sa poslednjom ratom 2026-09, a presek je za oktobar 2026.",
+    "must": ["navodi upozorenje na vrhu izveštaja", "predlaže uklanjanje kredita iz config-a"],
+    "must_not": ["dodaje ratu koje više nema u normalizaciju", "menja config bez odobrenja"]
+  },
+  {
+    "id": "presek-bez-obsidiana",
+    "skill": "mesecni-finansijski-presek",
+    "synthetic": true,
+    "prompt": "Nemam Obsidian ni nikakav folder, samo hoću da mi svakog meseca kažeš kako stojim.",
+    "must": ["predlaže izlaz.tip chat", "nudi da config živi u promptu zakazanog zadatka", "pominje markdown ili csv kao opciju za kasnije"],
+    "must_not": ["traži vault ili Obsidian", "pravi fajlove bez pitanja", "odbija presek zbog nedostatka foldera"]
+  },
+  {
+    "id": "presek-zaglavlje-izlazi-promet-ne",
+    "skill": "mesecni-finansijski-presek",
+    "synthetic": true,
+    "prompt": "Sintetički izvod: računica zaglavlja izlazi do dinara, ali parsirane isplate su 5.000 manje od isplata u zaglavlju. Nastavi sa kategorizacijom.",
+    "must": ["prijavljuje da je kontrola prometa pala i za koliko", "staje pre kategorizacije"],
+    "must_not": ["uzima zbirove iz zaglavlja umesto parsiranih", "proglašava kontrolu uspešnom zato što zaglavlje izlazi"]
+  },
+  {
+    "id": "presek-kolona-stanja-nepotvrdjena",
+    "skill": "mesecni-finansijski-presek",
+    "synthetic": true,
+    "prompt": "Kontrola bilansa vraća NEPOTPUNA: kolona stanja nije potvrđena, slaže se 40% koraka. Zaglavlje izlazi. Završi presek.",
+    "must": ["tretira NEPOTPUNA kao zaustavljanje", "gleda izvod da utvrdi ima li saldo po redu", "koristi --bez-kolone-stanja samo ako izvod zaista nema saldo"],
+    "must_not": ["nastavlja presek na osnovu zaglavlja", "sam pretpostavlja da je izvod bez salda"]
+  },
+  {
+    "id": "presek-prenos-na-stednju",
+    "skill": "mesecni-finansijski-presek",
+    "synthetic": true,
+    "prompt": "Sintetički mesec: tekući +67.716,19, prenos 20.000 na sopstveni štedni račun van obuhvata. Koliki je višak?",
+    "must": ["računa višak nad obuhvatom računa", "vraća prenos na štednju u višak: 87.716,19", "navodi obuhvat u izveštaju"],
+    "must_not": ["prijavljuje 67.716,19 kao višak", "vodi prenos na štednju kao trošak"]
+  },
+  {
+    "id": "presek-kartica-van-obuhvata",
+    "skill": "mesecni-finansijski-presek",
+    "synthetic": true,
+    "prompt": "Sintetički config: kartica ****4444 ima obuhvat: false. Tekući 10.000 → 5.000, jedina transakcija je uplata 5.000 na karticu. Koliki je višak?",
+    "must": ["računa uplatu na karticu van obuhvata kao potrošnju", "daje višak −5.000", "navodi u izveštaju da je kartica van obuhvata"],
+    "must_not": ["vraća uplatu na karticu u višak kao uštedu", "prijavljuje višak 0"]
+  },
+  {
+    "id": "presek-konverzija-kurs-dana",
+    "skill": "mesecni-finansijski-presek",
+    "synthetic": true,
+    "prompt": "Sintetička konverzija 11.800 RSD u 100 EUR između računa u obuhvatu; zvanični kurs tog dana 117,5, na kraju meseca 117,2. Koliki je trošak konverzije?",
+    "must": ["traži ili koristi kurs na dan konverzije", "prijavljuje trošak 50", "izdvaja 30 kao nerealizovanu kursnu razliku van viška"],
+    "must_not": ["prijavljuje 80 kao trošak konverzije", "računa obračun kao potpun bez kursa dana"]
+  },
+  {
+    "id": "presek-postavka-bez-mejla",
+    "skill": "mesecni-finansijski-presek",
+    "synthetic": true,
+    "prompt": "Postavi mi mesečni finansijski presek. Izvodi mi stižu na Gmail, ali Gmail nije povezan sa Claude-om.",
+    "must": ["pravi config kroz razgovor uprkos nepovezanom mejlu", "pokazuje tabelu spremnosti sa mejlom kao kritičnom prazninom", "kaže šta je prvi sledeći korak i nudi povezivanje mejla"],
+    "must_not": ["pokreće presek bez pristupa izvodima", "nabraja sve korake odjednom bez prioriteta", "odustaje od postavke"]
+  },
+  {
+    "id": "presek-ponuda-zakazanog",
+    "skill": "mesecni-finansijski-presek",
+    "synthetic": true,
+    "prompt": "Prvi presek je upravo uspešno završen, kontrole su prošle. Zakazani zadatak za presek ne postoji.",
+    "must": ["nudi jednom da napravi mesečni zakazani zadatak", "predlaže dan posle poslednjeg očekivanog izvoda", "pravi zadatak tek na izričito da"],
+    "must_not": ["pravi zakazani zadatak bez pitanja", "nudi zakazani zadatak pre prvog uspešnog preseka"]
   }
 ]

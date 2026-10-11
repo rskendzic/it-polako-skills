@@ -1,0 +1,187 @@
+# Potpun primer config-a za mesečni finansijski presek.
+# Sve vrednosti su IZMIŠLJENE. Zameni ih svojima.
+# Drži fajl kod sebe (folder, repo, ili ceo YAML u promptu zakazanog zadatka) — ne u skill-u.
+# Provera: python3 scripts/proveri_config.py finansije.config.yaml
+
+verzija: 1
+
+# ——— Lokalizacija ———
+lokalizacija:
+  jezik: srpski               # jezik izveštaja
+  valuta_osnovna: RSD
+  decimalni_separator: ","    # "," → 1.234,56   "." → 1,234.56
+  vremenska_zona: Europe/Belgrade
+
+# ——— Izveštaj ———
+izvestaj:
+  prag_odstupanja: 10000      # odstupanja ispod ovoga su šum
+  istorija_meseci: 6          # koliko prošlih izvoda za platu i pretplate
+  tolerancija: 0.01           # dopuštena razlika u kontroli bilansa
+
+# ——— Izvori ———
+# Odakle stižu izvodi. Svaki račun pokazuje na jedan izvor preko `izvor`.
+izvori:
+  - id: banka_a_mejl
+    tip: mejl
+    posiljaoci: [izvodi@banka-a.example]
+    ocekivano_do: 7           # dan u mesecu do kog bi sve trebalo da stigne
+
+  - id: banka_a_kartica
+    tip: mejl_tekst           # mejl bez priloga, samo tekst + link na portal
+    posiljaoci: [kartice@banka-a.example]
+    izvuci: [ukupan_dug, minimalna_uplata, datum_dospeca, broj_izvoda]
+
+  - id: banka_b_aplikacija
+    tip: rucno
+    uputstvo: "izvoz PDF-a iz mobilne aplikacije, meni Računi → Izvodi"
+
+  # - id: skenirani
+  #   tip: folder
+  #   putanja: ~/Finansije/Izvodi
+  #   obrazac: "*.pdf"
+
+# ——— Računi, samo poslednje 4 cifre ———
+# obuhvat: računi čija se promena stanja sabira u mesečni višak.
+# Podrazumevano svi osim štednih. Prenos ka računu van obuhvata
+# (štednja, investicije) je ušteda, ne potrošnja.
+racuni:
+  - zadnje4: "1111"
+    banka: Banka A
+    tip: tekuci               # tekuci | devizni | multivalutni | kreditna_kartica | stedni
+    valuta: RSD
+    uloga: plata i većina troškova
+    izvor: banka_a_mejl
+    # obuhvat: true           # podrazumevano true za sve osim tip: stedni
+
+  - zadnje4: "2222"
+    banka: Banka A
+    tip: devizni
+    valuta: EUR
+    uloga: pretplate
+    kartica_zadnje4: "3333"
+    izvor: banka_a_mejl
+    naknada_konverzije_procenat: 1   # prateći red od 1% je naknada, ne transakcija
+
+  - zadnje4: "4444"
+    banka: Banka A
+    tip: kreditna_kartica
+    limit: 200000
+    izvor: banka_a_kartica
+
+  - zadnje4: "5555"
+    banka: Banka B
+    tip: multivalutni
+    valuta: RSD
+    uloga: dostava hrane, telefon
+    izvor: banka_b_aplikacija
+    uslov_odrzavanja:
+      min_mesecna_potrosnja: 20000
+      opis: "ispod ovoga se naplaćuje održavanje"
+
+  - zadnje4: "7777"
+    banka: Banka A
+    tip: stedni
+    valuta: RSD
+    uloga: štednja
+    obuhvat: false            # prenos ovamo je ušteda, ne potrošnja
+    # izvor nije obavezan za račun van obuhvata
+
+# ——— Prihodi ———
+prihodi:
+  - naziv: plata
+    prepoznaj_po: ["PRIMER DOO"]       # deo opisa transakcije
+    racun: "1111"
+    ritam: mesecno
+    tip: prihod                        # prihod | refundacija
+
+  - naziv: refundacije
+    prepoznaj_po: ["PRIMER DOO TROSKOVI"]
+    ritam: neredovno
+    tip: refundacija                   # NIJE prihod — umanjuje trošak
+
+# ——— Kategorije ———
+# Kratki oblik: ime: [trgovci].  Dugi oblik dodaje ritam.
+# ritam: mesecno | sezonsko | neredovno — pomaže normalizaciji
+kategorije:
+  rezije:
+    trgovci: [ELEKTRO, VODOVOD, GAS, TELEKOM]
+    ritam: mesecno
+  gorivo: [PUMPA A, PUMPA B]
+  namirnice: [MARKET A, MARKET B, PIJACA]
+  apoteka: [APOTEKA]
+  pretplate:
+    trgovci: [STREAMING, CLOUD, MUZIKA]
+    ritam: mesecno
+  deca: [VRTIC, SKOLA SPORTA]
+  putarina: [PUTARINA]
+  naknade_banke:
+    trgovci: [NAKNADA, ODRZAVANJE RACUNA]
+    ritam: mesecno
+
+# ——— Transferi (nisu rashod) ———
+# Prenosi između računa iz ovog config-a prepoznaju se automatski.
+transferi:
+  opisi: ["PRENOS", "KUPOVINA DEVIZA", "PRODAJA DEVIZA", "UPLATA NA KARTICU"]
+
+# ——— Krediti ———
+krediti:
+  - naziv: auto kredit
+    partija_zadnje4: "6666"
+    anuitet: 30000
+    dan_naplate: 1
+    poslednja_rata: "2027-06"         # posle ovoga stavka ne postoji
+    napomena: "ne mešati sa registracijom auta"
+
+# ——— Keš ———
+kes:
+  nacin: naracija                     # naracija | nema
+  ladica: true                        # neiskorišćen keš se prenosi, nije trošak
+  stalne_linije:
+    - naziv: teretana
+      iznos: 3000
+    - naziv: pijaca
+      formula: "1.000 nedeljno"
+
+# ——— Neredovni godišnji troškovi ———
+rezerva:
+  godisnje_procena: 300000
+  stavke: [letovanje, registracija, kvarovi, praznici]
+
+# ——— Ciljevi ———
+ciljevi:
+  - naziv: rezervni fond
+    iznos: 5000
+    valuta: EUR
+    rok: "2027-12"
+    drzi_se_na: "2222"
+    mesecna_stopa_plan: 400
+
+# ——— Izlaz ———
+# Bez ovog bloka: samo izveštaj u razgovoru, ništa se ne upisuje.
+izlaz:
+  tip: markdown                       # chat | markdown | csv | obsidian
+  putanja: ~/Finansije
+  mesecne_note: "Izvodi/{YYYY}-{MM}.md"
+  glavni_fajl: "Pregled.md"           # opciono
+
+# Tabela umesto nota:
+# izlaz:
+#   tip: csv
+#   putanja: ~/Finansije
+#   fajl: finansije.csv
+
+# Obsidian vault:
+# izlaz:
+#   tip: obsidian
+#   putanja: ~/Vault
+#   mesecne_note: "Finansije/Izvodi/{YYYY}-{MM}.md"
+#   glavni_fajl: "Finansije.md"
+#   pravila: CLAUDE.md                # pravila vault-a imaju prednost
+
+# ——— Orkestracija (opciono) ———
+orkestracija:
+  podagenti: ne                       # da | ne
+  modeli:
+    mehanicki: haiku                  # pretraga, preuzimanje, listanje
+    analiticki: sonnet                # parsiranje, kategorizacija, poređenje
+    verifikacija: opus                # plan, finalni izveštaj, unakrsna provera
