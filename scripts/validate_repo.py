@@ -13,7 +13,12 @@ from typing import NoReturn
 
 
 ROOT = Path(__file__).resolve().parents[1]
-EXPECTED_SKILLS = {"iskristalisi-ideju", "pojasni-mi", "it-polako-montaza"}
+EXPECTED_SKILLS = {
+    "iskristalisi-ideju",
+    "pojasni-mi",
+    "it-polako-montaza",
+    "mesecni-finansijski-presek",
+}
 NAME_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 FRONTMATTER_PATTERN = re.compile(r"^---\n(.*?)\n---\n(.+)$", re.DOTALL)
 
@@ -153,6 +158,52 @@ def validate_rendering() -> None:
                 fail(f"Round-trip je promenio podatke: {source.name}")
 
 
+def validate_presek() -> None:
+    skill = ROOT / "skills" / "mesecni-finansijski-presek" / "scripts"
+    examples = ROOT / "examples" / "mesecni-finansijski-presek"
+    config = subprocess.run(
+        [sys.executable, str(skill / "proveri_config.py"),
+         str(examples / "sinteticki-config.json"), "--danas", "2026-10-10"],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if config.returncode != 0:
+        fail(f"Sintetički config ne prolazi proveru: {config.stdout.strip()} {config.stderr.strip()}")
+    bilans = subprocess.run(
+        [sys.executable, str(skill / "kontrola_bilansa.py"),
+         str(examples / "sinteticki-izvod.txt"),
+         "--config", str(examples / "sinteticki-config.json"),
+         "--pocetno", "100000", "--zavrsno", "167716.19",
+         "--isplate", "32634.56", "--uplate", "100350.75"],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if bilans.returncode != 0:
+        fail(f"Kontrola bilansa ne prolazi na sintetičkom izvodu: {bilans.stdout.strip()}")
+    bez_zaglavlja = subprocess.run(
+        [sys.executable, str(skill / "kontrola_bilansa.py"),
+         str(examples / "sinteticki-izvod.txt")],
+        cwd=ROOT, text=True, capture_output=True, check=False,
+    )
+    if bez_zaglavlja.returncode != 3:
+        fail("Kontrola bez zaglavlja mora biti NEPOTPUNA (kod 3), ne uspeh")
+    visak = subprocess.run(
+        [sys.executable, str(skill / "obracun_viska.py"),
+         str(examples / "sinteticki-mesec.json"),
+         "--config", str(examples / "sinteticki-config.json"), "--json"],
+        cwd=ROOT, text=True, capture_output=True, check=False,
+    )
+    if visak.returncode != 0:
+        fail(f"Obračun viška ne prolazi na sintetičkom mesecu: {visak.stdout.strip()}")
+    vodopad = {s["korak"]: s["iznos"] for s in json.loads(visak.stdout)["vodopad"]}
+    if abs(vodopad.get("= višak meseca", 0) - 87716.19) > 0.005:
+        fail("Prenos na štednju mora ući u višak kao ušteda, ne kao potrošnja")
+
+
 def main() -> int:
     try:
         validate_skills()
@@ -160,10 +211,11 @@ def main() -> int:
         validate_evals()
         validate_hlg_helper()
         validate_rendering()
+        validate_presek()
     except (OSError, json.JSONDecodeError, ValueError) as error:
         print(f"Puklo je: {error}", file=sys.stderr)
         return 1
-    print("Prolazi: 3 skilla, plugin, Codex metapodaci, evalovi, HLG pomoćnik i offline HTML.")
+    print("Prolazi: 4 skilla, plugin, Codex metapodaci, evalovi, HLG pomoćnik, offline HTML, kontrola bilansa i obračun viška.")
     return 0
 
 

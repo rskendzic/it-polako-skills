@@ -5,14 +5,14 @@
     "name": "IT Polako",
     "url": "https://skendzic.dev"
   },
-  "description": "Srpski Agent Skills za razumevanje stvarnih izvora, razradu ideja i montažu IT Polako klipova.",
+  "description": "Srpski Agent Skills za razumevanje stvarnih izvora, razradu ideja, montažu IT Polako klipova i mesečni finansijski presek.",
   "plugins": [
     {
       "name": "it-polako-skills",
       "source": "./",
-      "description": "Pojasni stvarne izvore, iskristališi nedorečene ideje i montiraj IT Polako klipove na srpskom.",
+      "description": "Pojasni stvarne izvore, iskristališi nedorečene ideje, montiraj IT Polako klipove i zatvori mesec iz bankovnih izvoda na srpskom.",
       "category": "productivity",
-      "keywords": ["serbian", "understanding", "ideas", "productivity", "video"]
+      "keywords": ["serbian", "understanding", "ideas", "productivity", "video", "finance"]
     }
   ]
 }
