@@ -148,7 +148,8 @@ Agent pravi završni klip u izlaznom folderu projekta, u istoj rezoluciji, fps-u
 - pravi jedan transkript po rečima i ispravlja pomak audio toka;
 - otkriva ponovljene početke rečenica koje transkript sakrije;
 - meri naslov i titlove na referentnim kadrovima pre rendera;
-- duže umetke stavlja u podeljen ekran, sa govornikom ispod;
+- duže umetke stavlja u podeljen ekran, sa govornikom ispod, i koristi odobrene efekte umetaka;
+- motion graphic tretira kao nezavisan sloj, a snimljeni kadar ostavlja miran;
 - mapira grafiku u HLG i pravi SDR pregled kroz LUT;
 - proverava original, frejmove, spojeve, tokove i glasnoću, pa prijavljuje šta nije provereno.
 
@@ -209,7 +210,7 @@ it-polako-skills/
 │   └── it-polako-montaza/
 │       ├── SKILL.md                 # kanonsko ponašanje
 │       ├── agents/openai.yaml       # Codex/ChatGPT prikaz
-│       ├── references/              # izgled, transkript i rez, HLG, ograničeno okruženje
+│       ├── references/              # izgled, efekti, motion graphic, transkript i rez, HLG, ograničeno okruženje
 │       └── scripts/hlg_boje.py
 ├── examples/                        # samo sintetički primeri
 ├── evals/                           # obavezna i zabranjena ponašanja

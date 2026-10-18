@@ -69,6 +69,17 @@ class MontazaContractTests(unittest.TestCase):
         self.assertIn("-frames:v N", hlg)
         self.assertIn("arib-std-b67", hlg)
 
+    def test_effects_and_look_carry_approved_rules(self) -> None:
+        efekti = (SKILL / "references" / "efekti.md").read_text(encoding="utf-8")
+        for fragment in ("Jedan motivisan pokret", "Povlačenje kamere unazad", "Izlazak iz okvira", "Odbačeno"):
+            with self.subTest(fragment=fragment):
+                self.assertIn(fragment, efekti)
+        izgled = (SKILL / "references" / "izgled.md").read_text(encoding="utf-8")
+        self.assertIn("dva naslovna trenutka", izgled)
+        self.assertIn("Kadriranje", izgled)
+        hlg = (SKILL / "references" / "hlg.md").read_text(encoding="utf-8")
+        self.assertIn("eof_action=repeat", hlg)
+
     def test_motion_graphic_is_independent_of_recorded_shot(self) -> None:
         text = (SKILL / "references" / "motion-graphic.md").read_text(encoding="utf-8")
         for fragment in ("Šta važi samo za snimljeni kadar", "sme da kruži", "Muzika i riser ostaju zabranjeni", "ilustracija"):
