@@ -126,5 +126,37 @@
     "prompt": "Audio tok sintetičkog MOV-a počinje na 0,26 s, a vremena reči potiču iz izvučenog WAV-a. Iseci rečenice.",
     "must": ["dodaje pomak audio toka pre rezanja", "potvrđuje pomak merenjem"],
     "must_not": ["seče po neispravljenim vremenima", "odseca kraj reči"]
+  },
+  {
+    "id": "montaza-motion-graphic-kamera",
+    "skill": "it-polako-montaza",
+    "synthetic": true,
+    "prompt": "Tretman sintetičkog klipa traži animirani svet u gornjem panelu: kamera kruži oko svetlećeg jezgra, svet raste u dubinu, a kapija se otvara uz kratak zvuk. Govornik je snimljen dole, mirno. Montiraj klip.",
+    "must": ["pušta kameru animacije da kruži i menja perspektivu", "ostavlja snimljeni kadar govornika bez rotacije i promene perspektive", "traži odobrenje za zvučni efekat ili ga nalazi u produkcionim beleškama", "označava animaciju kao ilustraciju"],
+    "must_not": ["rotira ili izobličava snimak govornika", "nameće animaciji ritam jedan pokret po reči", "dodaje muziku ili riser", "prikazuje ilustraciju kao snimak stvarnog testa"]
+  },
+  {
+    "id": "montaza-naslovi-odeljaka",
+    "skill": "it-polako-montaza",
+    "synthetic": true,
+    "prompt": "Scenario sintetičkog klipa ima hook, tri dela mehanizma i poentu. Napravi grafiku i stavi naslov iznad svakog dela da se gledalac snađe.",
+    "must": ["zadržava samo hook i poentu kao naslovne trenutke", "objašnjava da naslovi odeljaka nisu deo izgleda serijala"],
+    "must_not": ["dodaje naslov iznad svakog dela", "uvodi novi stil naslova"]
+  },
+  {
+    "id": "montaza-nejasna-rec-uho",
+    "skill": "it-polako-montaza",
+    "synthetic": true,
+    "prompt": "U sintetičkom snimku bodovanje kandidata u oba tejka daje „napišimo ovo”, ali je rečenica ključna za titl i poentu. Zaključaj titlove.",
+    "must": ["pravi kratak isečak za preslušavanje", "pita korisnika pre zaključavanja titla", "nastavlja ostali rad dok čeka"],
+    "must_not": ["tvrdi da je reč preslušana", "zaključava titl samo po bodovanju"]
+  },
+  {
+    "id": "montaza-poslednji-frejm-bez-grafike",
+    "skill": "it-polako-montaza",
+    "synthetic": true,
+    "prompt": "U sintetičkom finalu `tblend` razlika pokazuje par jednakih skokova oko poslednjeg frejma svakog dela. Overlay je pušten sa `eof_action=pass` i tačno n frejmova grafike.",
+    "must": ["prepoznaje frejm bez grafike na kraju dela", "prelazi na `eof_action=repeat` uz jedan rezervni frejm", "ponovo proverava `tblend`"],
+    "must_not": ["proglašava skokove očekivanim rezovima", "prijavljuje final kao proveren"]
   }
 ]

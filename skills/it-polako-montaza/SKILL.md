@@ -4,7 +4,7 @@ description: Montira IT Polako talking-head klip od originalnog snimka telefona 
 license: MIT
 metadata:
   author: IT Polako
-  version: "0.1.0"
+  version: "0.2.0"
   language: sr-Latn-RS
 ---
 
@@ -36,8 +36,8 @@ Ako projekat ima sopstveni postupak montaže, na primer projektni `SKILL.md` sa 
 2. **Snimak.** Pokreni `ffprobe` i zapiši rezoluciju, rotaciju, fps, kodek, prenosnu funkciju, primarne boje, Dolby Vision i `start_time` audio toka. Pre bilo kakve konverzije pitaj. Podrazumevano: isti kadar i fps, HEVC 10-bit HLG BT.2020, a Dolby Vision metapodaci se gube.
 3. **Jedan transkript po rečima.** Prati [transkript i rez](references/transkript-i-rez.md). Ispravi vremena za `start_time` audio toka. Nejasne reči razreši bodovanjem kandidata nad snimkom, ne scenarijem.
 4. **Izbor tejkova i rez.** Za svaki tejk proveri da li je početak ponovljen, jer prepoznavanje govora spaja ponovljene fraze. Neprekinut tejk ima prednost nad rezom usred rečenice. Izmeri energiju zvuka na ivicama svakog segmenta.
-5. **Jedan tretman.** Svaki vizuelni element ima narativni posao: naslov, obični titlovi, naglasci, umeci i kraj. Izgled prati [izgled serijala](references/izgled.md).
-6. **Pregled.** Napravi lak pregled u nižoj rezoluciji kroz HLG→SDR LUT (`scripts/hlg_boje.py lut`). Sam pogledaj ključne frejmove: naslov uz referencu, ulaz i izlaz iz umetka, poentu i poslednji frejm.
+5. **Jedan tretman.** Svaki vizuelni element ima narativni posao: naslov, obični titlovi, naglasci, umeci i kraj. Izgled prati [izgled serijala](references/izgled.md). Animirani svet, kada ga klip ima, prati [motion graphic](references/motion-graphic.md).
+6. **Pregled.** Napravi lak pregled u nižoj rezoluciji kroz HLG→SDR LUT (`scripts/hlg_boje.py lut`). Sam pogledaj ključne frejmove: naslov uz referencu, ulaz i izlaz iz umetka, poentu i poslednji frejm. Kadriranje i raspored se rešavaju na pregledu. Ako je korisnik tu, pokaži mu pregled i sačekaj odobrenje pre 4K rendera.
 7. **Završni render.** Prati [HLG postupak](references/hlg.md). Ako okruženje ograničava trajanje poziva ili memoriju, radi po [ograničenom okruženju](references/ograniceno-okruzenje.md).
 8. **Izveštaj.** Navedi tačnu putanju fajla, šta je kreativno urađeno, kako je postupak primenjen i šta nije provereno.
 
@@ -45,10 +45,13 @@ Ako projekat ima sopstveni postupak montaže, na primer projektni `SKILL.md` sa 
 
 - Govor iz snimka ima prednost nad scenarijem. Titl piše ono što je rečeno.
 - Naslov se meri na referenci i pre rendera stavlja uporedo sa njom.
+- Klip ima dva naslovna trenutka: hook na početku i poentu. Između njih nema naslova odeljaka.
+- Efekat u umetku pokazuje ideju rečenice, po [efektima umetaka](references/efekti.md). Nijedan efekat nije ukras.
 - Umetak koji traje duže od jedne rečenice ide u podeljen ekran: gore umetak, dole govornik.
+- Snimljeni kadar govornika se ne rotira i ne menja mu se perspektiva. Motion graphic je nezavisan sloj i sme da kruži, menja perspektivu i ima sopstveni ritam.
 - Original ostaje netaknut. Rezolucija, fps i kolor namera ostaju kao u originalu, osim ako korisnik odobri drugačije.
 - Stvarni dokument se prikazuje stvarnim tekstom. Ilustracija se označava kao ilustracija, a prazan šablon je vidljivo prazan.
-- Bez muzike i risera, osim ako produkcione beleške traže drugačije.
+- Bez muzike i risera, osim ako produkcione beleške traže drugačije. Zvučni efekat uz motion graphic je izuzetak koji korisnik odobrava po klipu.
 
 ## Zabranjeno ponašanje
 
@@ -69,4 +72,8 @@ Završeno je tek kada:
 - naslov stoji uporedo sa referencom i odgovara joj po težini, nagibu, širini i senci;
 - prepoznavanje govora nad finalom daje sve rečenice redom, uz napomenu da ponavljanja ne otkriva;
 - glasnoća je izmerena: cilj oko −14 LUFS, true peak najviše −1 dBTP;
-- izveštaj navodi šta nije provereno: preslušavanje uhom, prikaz na HDR ekranu, sinhronizaciju usana.
+- svaki deo ima grafiku i na poslednjem frejmu; par jednakih skokova `tblend` razlike oko jednog frejma znači jedan loš frejm;
+- prepoznavanje govora nad finalom poklapa se sa titlovima reč po reč;
+- RMS na svakoj ivici reza je na nivou šuma;
+- ako je traženo poređenje sa verzijom drugog agenta, uzorkovani su isti trenuci iz oba finala i poređeni kadriranje, bezbedne zone, izgled serijala, titlovi, vernost govoru i bitrate;
+- izveštaj navodi šta nije provereno: preslušavanje uhom, označene reči, prikaz na HDR ekranu, sinhronizaciju usana.
