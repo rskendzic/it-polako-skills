@@ -1,0 +1,9 @@
+SINTETICKA BANKA AD                     Izvod kreditne kartice ****4444, period 01.09.2026 - 30.09.2026
+
+Datum        Opis                              Zaduzenje        Odobrenje
+03.09.2026   MARKET A                           2.500,00
+10.09.2026   STREAMING                            999,00
+15.09.2026   UPLATA NA KARTICU                                  10.000,00
+22.09.2026   PUMPA B                            4.200,50
+
+Prethodni dug: 10.000,00   Zaduzenje: 7.699,50   Odobrenje: 10.000,00   Novi dug: 7.699,50

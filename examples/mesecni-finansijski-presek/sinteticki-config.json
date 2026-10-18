@@ -1,0 +1,75 @@
+{
+  "verzija": 1,
+  "lokalizacija": {
+    "valuta_osnovna": "RSD",
+    "decimalni_separator": ","
+  },
+  "izvori": [
+    {
+      "id": "banka",
+      "tip": "mejl",
+      "posiljaoci": [
+        "izvodi@banka.example"
+      ]
+    }
+  ],
+  "racuni": [
+    {
+      "zadnje4": "1111",
+      "tip": "tekuci",
+      "valuta": "RSD",
+      "izvor": "banka"
+    },
+    {
+      "zadnje4": "2222",
+      "tip": "devizni",
+      "valuta": "EUR",
+      "izvor": "banka",
+      "naknada_konverzije_procenat": 1
+    },
+    {
+      "zadnje4": "9999",
+      "tip": "stedni",
+      "valuta": "RSD",
+      "uloga": "štednja, van obuhvata"
+    }
+  ],
+  "prihodi": [
+    {
+      "naziv": "plata",
+      "prepoznaj_po": [
+        "PRIMER DOO"
+      ],
+      "tip": "prihod"
+    }
+  ],
+  "izlaz": {
+    "tip": "chat"
+  },
+  "kategorije": {
+    "namirnice": [
+      "MARKET A"
+    ],
+    "rezije": {
+      "trgovci": [
+        "ELEKTRO"
+      ],
+      "ritam": "mesecno"
+    },
+    "gorivo": [
+      "PUMPA A"
+    ]
+  },
+  "transferi": {
+    "opisi": [
+      "PRENOS"
+    ]
+  },
+  "izvestaj": {
+    "prag_odstupanja": 10000,
+    "tolerancija": 0.01
+  },
+  "rezerva": {
+    "godisnje_procena": 120000
+  }
+}
