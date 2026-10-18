@@ -1,0 +1,25 @@
+# Minimalni config. Dovoljan za prvi presek; ostalo se dopunjava iz izvoda.
+verzija: 1
+
+lokalizacija:
+  valuta_osnovna: RSD
+  decimalni_separator: ","
+
+izvori:
+  - id: banka
+    tip: mejl
+    posiljaoci: [izvodi@banka.example]
+
+racuni:
+  - zadnje4: "1234"
+    tip: tekuci
+    valuta: RSD
+    izvor: banka
+
+prihodi:
+  - naziv: plata
+    prepoznaj_po: ["POSLODAVAC"]
+    tip: prihod
+
+izlaz:
+  tip: chat

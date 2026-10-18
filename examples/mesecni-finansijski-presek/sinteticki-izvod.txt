@@ -1,0 +1,12 @@
+SINTETICKA BANKA AD                                   Izvod br. 9 za period 01.09.2026 - 30.09.2026
+Racun: ****1111                                                                   Valuta: RSD
+
+Rb  Opis                              Dat. knjizenja   Isplata          Uplata            Stanje
+                                                                                     100.000,00
+1   MARKET A                          02.09.2026       1.234,56                       98.765,44
+2   ELEKTRO                           05.09.2026       6.400,00                       92.365,44
+3   PRENOS NA RACUN ****9999          10.09.2026      20.000,00                       72.365,44
+4   PUMPA A                           18.09.2026       5.000,00                       67.365,44
+5   PRIMER DOO                        30.09.2026                      100.350,75     167.716,19
+
+Pocetno stanje: 100.000,00   Isplate: 32.634,56   Uplate: 100.350,75   Zavrsno stanje: 167.716,19

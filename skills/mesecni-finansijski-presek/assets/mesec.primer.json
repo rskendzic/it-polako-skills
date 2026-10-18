@@ -1,0 +1,32 @@
+{
+  "kurs": {
+    "EUR": 117.2
+  },
+  "racuni": {
+    "1111": {
+      "pocetno": 100000,
+      "zavrsno": 167716.19
+    },
+    "2222": {
+      "pocetno": 50,
+      "zavrsno": 50
+    }
+  },
+  "transferi": [
+    {
+      "sa": "1111",
+      "na": "9999",
+      "iznos_sa": 20000,
+      "iznos_na": 20000
+    }
+  ],
+  "jednokratno": {
+    "prihodi": [],
+    "troskovi": [],
+    "prestale_obaveze": []
+  },
+  "kontrola": {
+    "redovni_prihodi": 100350.75,
+    "redovni_troskovi": 12634.56
+  }
+}

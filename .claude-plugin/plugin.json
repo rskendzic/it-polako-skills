@@ -2,8 +2,8 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "it-polako-skills",
   "displayName": "IT Polako Skills",
-  "version": "0.3.1",
-  "description": "Srpski Agent Skills za razjašnjavanje ideja, razumevanje stvarnih artefakata i montažu IT Polako klipova.",
+  "version": "0.4.0",
+  "description": "Srpski Agent Skills za razjašnjavanje ideja, razumevanje stvarnih artefakata, montažu IT Polako klipova i mesečni finansijski presek.",
   "author": {
     "name": "IT Polako",
     "url": "https://skendzic.dev"
@@ -11,6 +11,6 @@
   "homepage": "https://skendzic.dev",
   "repository": "https://github.com/rskendzic/it-polako-skills",
   "license": "MIT",
-  "keywords": ["agent-skills", "serbian", "claude-code", "codex", "learning", "video"],
+  "keywords": ["agent-skills", "serbian", "claude-code", "codex", "learning", "video", "finance"],
   "skills": "./skills/"
 }

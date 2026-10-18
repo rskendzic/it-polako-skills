@@ -5,7 +5,12 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-EXPECTED_SKILLS = {"iskristalisi-ideju", "pojasni-mi", "it-polako-montaza"}
+EXPECTED_SKILLS = {
+    "iskristalisi-ideju",
+    "pojasni-mi",
+    "it-polako-montaza",
+    "mesecni-finansijski-presek",
+}
 
 
 def frontmatter(path: Path) -> dict[str, str]:
