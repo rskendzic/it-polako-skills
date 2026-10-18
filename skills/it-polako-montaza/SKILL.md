@@ -4,7 +4,7 @@ description: Montira IT Polako talking-head klip od originalnog snimka telefona 
 license: MIT
 metadata:
   author: IT Polako
-  version: "0.2.0"
+  version: "0.2.1"
   language: sr-Latn-RS
 ---
 
@@ -32,18 +32,18 @@ Ako projekat ima sopstveni postupak montaže, na primer projektni `SKILL.md` sa 
 
 ## Postupak
 
-1. **Ulazi.** Pročitaj zadatak, produkcione beleške, scenario, reference i fontove (`fc-scan`). Ako fajl nedostaje, prijavi tačno koji. Zapiši sha256, veličinu i vreme izmene originala. Proveri da li u istom folderu radi drugi agent (`find . -newer <fajl zadatka> -type f`). Ako radi, rad i izlaz drži u svom podfolderu (`work/<agent>/`, `output/<agent>/`) i ne presnimavaj tuđe fajlove.
+1. **Ulazi.** Pročitaj zadatak, produkcione beleške, scenario, reference i fontove (`fc-scan`). Ako fajl nedostaje, prijavi tačno koji. Zapiši sha256, veličinu i vreme izmene originala. Proveri da li u istom folderu radi drugi agent (`find . -newer <fajl zadatka> -type f`). Ako radi, rad i izlaz drži u svom podfolderu (`work/<agent>/`, `output/<agent>/`) i ne presnimavaj tuđe fajlove. Fontovi po ulozi: `title-heavy.ttf` za naslov i poentu, `typewriter-medium.ttf` za titl, `title.ttf` nije za naslove.
 2. **Snimak.** Pokreni `ffprobe` i zapiši rezoluciju, rotaciju, fps, kodek, prenosnu funkciju, primarne boje, Dolby Vision i `start_time` audio toka. Pre bilo kakve konverzije pitaj. Podrazumevano: isti kadar i fps, HEVC 10-bit HLG BT.2020, a Dolby Vision metapodaci se gube.
-3. **Jedan transkript po rečima.** Prati [transkript i rez](references/transkript-i-rez.md). Ispravi vremena za `start_time` audio toka. Nejasne reči razreši bodovanjem kandidata nad snimkom, ne scenarijem.
-4. **Izbor tejkova i rez.** Za svaki tejk proveri da li je početak ponovljen, jer prepoznavanje govora spaja ponovljene fraze. Neprekinut tejk ima prednost nad rezom usred rečenice. Izmeri energiju zvuka na ivicama svakog segmenta.
+3. **Jedan transkript po rečima.** Prati [transkript i rez](references/transkript-i-rez.md). Ispravi vremena za `start_time` audio toka. Nejasne reči razreši bodovanjem kandidata nad celom rečenicom iz snimka, ne scenarijem. Titl piše izgovoreni oblik, i kada je kolokvijalan.
+4. **Izbor tejkova i rez.** Za svaki tejk proveri da li je početak ponovljen, jer prepoznavanje govora spaja ponovljene fraze. Neprekinut tejk ima prednost nad rezom usred rečenice. Izmeri energiju zvuka na ivicama svakog segmenta i 1,2 s oko njih: kratka reč posle pauze ume da ostane van granice tišine. Kada naslov ili poenta citiraju rečenicu, izaberi tejk čije reči odgovaraju i isti oblik koristi u oba.
 5. **Jedan tretman.** Svaki vizuelni element ima narativni posao: naslov, obični titlovi, naglasci, umeci i kraj. Izgled prati [izgled serijala](references/izgled.md). Animirani svet, kada ga klip ima, prati [motion graphic](references/motion-graphic.md).
-6. **Pregled.** Napravi lak pregled u nižoj rezoluciji kroz HLG→SDR LUT (`scripts/hlg_boje.py lut`). Sam pogledaj ključne frejmove: naslov uz referencu, ulaz i izlaz iz umetka, poentu i poslednji frejm. Kadriranje i raspored se rešavaju na pregledu. Ako je korisnik tu, pokaži mu pregled i sačekaj odobrenje pre 4K rendera.
+6. **Pregled.** Pre pregleda pokreni prepoznavanje govora nad isečenim zvukom i uporedi ga sa titlovima reč po reč. Napravi lak pregled u nižoj rezoluciji kroz HLG→SDR LUT (`scripts/hlg_boje.py lut`). Sam pogledaj ključne frejmove: naslov uz referencu, ulaz i izlaz iz umetka, poentu i poslednji frejm. Kadriranje i raspored se rešavaju na pregledu. Ako je korisnik tu, pokaži mu pregled i sačekaj odobrenje pre 4K rendera.
 7. **Završni render.** Prati [HLG postupak](references/hlg.md). Ako okruženje ograničava trajanje poziva ili memoriju, radi po [ograničenom okruženju](references/ograniceno-okruzenje.md).
 8. **Izveštaj.** Navedi tačnu putanju fajla, šta je kreativno urađeno, kako je postupak primenjen i šta nije provereno.
 
 ## Obavezno ponašanje
 
-- Govor iz snimka ima prednost nad scenarijem. Titl piše ono što je rečeno.
+- Govor iz snimka ima prednost nad scenarijem. Titl piše ono što je rečeno, i u kolokvijalnom obliku („upustvo”), ne standardni pravopis.
 - Naslov se meri na referenci i pre rendera stavlja uporedo sa njom.
 - Klip ima dva naslovna trenutka: hook na početku i poentu. Između njih nema naslova odeljaka.
 - Efekat u umetku pokazuje ideju rečenice, po [efektima umetaka](references/efekti.md). Nijedan efekat nije ukras.
@@ -57,6 +57,8 @@ Ako projekat ima sopstveni postupak montaže, na primer projektni `SKILL.md` sa 
 
 - Ne biraj font po imenu fajla i ne zamenjuj dostavljenu porodicu drugom bez odobrenja.
 - Ne veruj transkriptu da u tejku nema ponovljenih fraza.
+- Ne seci po granici tišine bez provere energije posle nje.
+- Ne dodaji međunaslove između naslova i poente.
 - Ne tvrdi da je nešto preslušano ako nije preslušano uhom. Napiši čime je provereno.
 - Ne tvrdi da je klip montiran po veštini ako postupak nije stvarno primenjen.
 - Ne objavljuj klip.
@@ -71,7 +73,7 @@ Završeno je tek kada:
 - `ffprobe` finala pokazuje očekivanu rezoluciju i fps, HEVC Main10, `arib-std-b67` i `bt2020`;
 - naslov stoji uporedo sa referencom i odgovara joj po težini, nagibu, širini i senci;
 - prepoznavanje govora nad finalom daje sve rečenice redom, uz napomenu da ponavljanja ne otkriva;
-- glasnoća je izmerena: cilj oko −14 LUFS, true peak najviše −1 dBTP;
+- glasnoća je izmerena: cilj oko −14 LUFS, true peak najviše −1 dBTP; ako true peak ograniči pojačanje, prijavljena je postignuta vrednost;
 - svaki deo ima grafiku i na poslednjem frejmu; par jednakih skokova `tblend` razlike oko jednog frejma znači jedan loš frejm;
 - prepoznavanje govora nad finalom poklapa se sa titlovima reč po reč;
 - RMS na svakoj ivici reza je na nivou šuma;
