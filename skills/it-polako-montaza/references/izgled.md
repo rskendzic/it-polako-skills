@@ -28,6 +28,7 @@ Provera pre rendera: tekst sa referentnog kadra postavi svojim stilom uz isečak
 - Snimak se spušta bez skaliranja, na primer `crop=2160:2040:0:480,pad=2160:3840:0:1800`. Podesi isečak tako da glava padne odmah ispod šava, a brada ostane iznad donjeg interfejsa, na oko 77% visine.
 - Titl tada ide u jednom redu na dnu panela.
 - Ulaz i izlaz su tvrdi rezovi na granici rečenice.
+- Gornji panel može da nosi i motion graphic. Tada panel ima svoju kameru i ritam po [motion graphic](motion-graphic.md), a donji kadar govornika ostaje miran.
 
 ## Naglasci
 

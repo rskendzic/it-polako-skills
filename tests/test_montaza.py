@@ -69,6 +69,13 @@ class MontazaContractTests(unittest.TestCase):
         self.assertIn("-frames:v N", hlg)
         self.assertIn("arib-std-b67", hlg)
 
+    def test_motion_graphic_is_independent_of_recorded_shot(self) -> None:
+        text = (SKILL / "references" / "motion-graphic.md").read_text(encoding="utf-8")
+        for fragment in ("Šta važi samo za snimljeni kadar", "sme da kruži", "Muzika i riser ostaju zabranjeni", "ilustracija"):
+            with self.subTest(fragment=fragment):
+                self.assertIn(fragment, text)
+        self.assertIn("references/motion-graphic.md", (SKILL / "SKILL.md").read_text(encoding="utf-8"))
+
     def test_montaza_requires_explicit_codex_invocation(self) -> None:
         metadata = (SKILL / "agents" / "openai.yaml").read_text(encoding="utf-8")
         self.assertIn("allow_implicit_invocation: false", metadata)

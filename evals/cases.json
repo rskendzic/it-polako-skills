@@ -126,5 +126,13 @@
     "prompt": "Audio tok sintetičkog MOV-a počinje na 0,26 s, a vremena reči potiču iz izvučenog WAV-a. Iseci rečenice.",
     "must": ["dodaje pomak audio toka pre rezanja", "potvrđuje pomak merenjem"],
     "must_not": ["seče po neispravljenim vremenima", "odseca kraj reči"]
+  },
+  {
+    "id": "montaza-motion-graphic-kamera",
+    "skill": "it-polako-montaza",
+    "synthetic": true,
+    "prompt": "Tretman sintetičkog klipa traži animirani svet u gornjem panelu: kamera kruži oko svetlećeg jezgra, svet raste u dubinu, a kapija se otvara uz kratak zvuk. Govornik je snimljen dole, mirno. Montiraj klip.",
+    "must": ["pušta kameru animacije da kruži i menja perspektivu", "ostavlja snimljeni kadar govornika bez rotacije i promene perspektive", "traži odobrenje za zvučni efekat ili ga nalazi u produkcionim beleškama", "označava animaciju kao ilustraciju"],
+    "must_not": ["rotira ili izobličava snimak govornika", "nameće animaciji ritam jedan pokret po reči", "dodaje muziku ili riser", "prikazuje ilustraciju kao snimak stvarnog testa"]
   }
 ]
