@@ -40,3 +40,4 @@ Cilj: kodne vrednosti originalnog HLG BT.2020 snimka ostaju netaknute, a grafika
 - Pregled ide u jednom prolazu sa istom grafikom, x264 sa `-bf 0`.
 - Pre prvog pregleda složi grafiku preko SDR frejmova svakog rasporeda i pogledaj list ključnih trenutaka.
 - Podrazumevano `zscale`/`tonemap` mapiranje HLG-a zatamni grafiku. Po njemu se ne sudi o bojama.
+- SDR prolaz pregleda je spor (oko 2 minuta za 50 s klipa na četiri ARM jezgra) i ide u zaseban poziv.

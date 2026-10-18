@@ -9,13 +9,13 @@
 - Početni prompt služi samo za pismo, na primer „Pišemo srpski latinicom: č, ć, š, ž, đ.” Tekst scenarija se nikad ne daje kao prompt.
 - Isečci kraći od oko 1,5 s haluciniraju („Hvala što pratite”). Ne koriste se kao dokaz.
 - Audio deli na delove do oko 60 s, po tišinama. Svaki prozor fraze pusti i posebno, sa promptom i bez njega, da se otkriju spojena ponavljanja.
-- Titl piše ono što je rečeno, uključujući razgovorne oblike, ne standardni pravopis i ne scenario. Nepostojeću reč iz prepoznavanja zameni najbližom stvarnom po bodovanju i označi je.
+- Titl piše ono što je rečeno, uključujući razgovorne oblike („upustvo”, „AI-u”), ne standardni pravopis i ne scenario. Nepostojeću reč iz prepoznavanja zameni najbližom stvarnom po bodovanju i označi je.
 - Pre prvog pregleda pusti prepoznavanje nad audiom reza i uporedi ga reč po reč sa titlovima. Svaka razlika je greška ili mesto za proveru.
 - `transcript/recorded.md`: tabela svake fraze iz snimka sa granicama u originalu (merenim energijom), oznakom upotrebljeno, neupotrebljeno ili lažan početak, označenim rečima i njihovim rešenjem, i tabela plan naspram snimka. Vremena reči su procena prepoznavanja; napiši to.
 
 ## Pomak audio toka
 
-Telefonski MOV često ima audio tok koji počinje posle slike, na primer `start_time` od 0,26 s. WAV izvučen za transkripciju taj pomak izgubi, pa su sva vremena iz prepoznavanja i tišina ranija za isti iznos.
+Telefonski MOV često ima audio tok koji počinje posle slike, na primer `start_time` od 0,21 ili 0,26 s. Vrednost se razlikuje od snimka do snimka, pa se svaki put meri. WAV izvučen za transkripciju taj pomak izgubi, pa su sva vremena iz prepoznavanja i tišina ranija za isti iznos.
 
 Dodaj pomak pre rezanja i potvrdi ga unakrsnom korelacijom isečka izdvojenog po pts (`atrim`) sa WAV-om. Bez toga rez seče kraj reči.
 
@@ -39,7 +39,7 @@ res = model.model.align(enc, tok.sot_sequence, [tok.encode(" " + kandidat)], fea
 skor = sum(log(max(p, 1e-9)) for p in res.text_token_probs)
 ```
 
-Veći zbir znači verovatnije čitanje. Boduj cele rečenice, jer kratak isečak može da preokrene presudu. Kod izjednačenja izaberi gramatički ispravno čitanje i označi mesto za proveru uhom.
+Veći zbir znači verovatnije čitanje. Boduj cele rečenice, jer kratak isečak može da preokrene presudu, na primer „pitaj” prema „pitaš”. Kod izjednačenja izaberi gramatički ispravno čitanje i označi mesto za proveru uhom.
 
 Bodovanje nije slušanje. Oba tejka mogu ubedljivo da daju pogrešno čitanje. Za ključne reči napravi isečke od 2 do 4 s u `work/<agent>/review-clips/`, zamoli korisnika da ih presluša rano, nastavi rad dok sluša i tek onda zaključaj titlove.
 
@@ -56,10 +56,10 @@ Granice po tišini umeju da izbace kratku reč posle pauze. Za svaki segment ske
 ## Rez
 
 - Rukohvati: oko 0,12 s pre početka govora i oko 0,2 s posle poslednje reči.
-- Posle reza izmeri RMS prvih i poslednjih 60 ms svakog segmenta. Mora biti na nivou šuma (oko −65 dBFS), inače produži segment.
+- Posle reza izmeri RMS prvih i poslednjih 60 ms svakog segmenta. Mora biti na nivou šuma (oko −65 do −73 dBFS), inače produži segment.
 - Rečenice snimljene jedna za drugom, sa kratkom prirodnom pauzom, uzimaju se kao neprekinut opseg, bez mikro reza. Pauza duža od oko 1 s unutar liste sme da se iseče na tišini.
 - Pretapanje zvuka od 12 ms na svakom rezu.
-- Glasnoća: linearno pojačanje do −14 LUFS, ograničeno true peakom od −1 dBTP, bez kompresora. Ako true peak ograniči pojačanje, prijavi dostignutu vrednost. Pojačanje računaj ponovo kad god se segmenti promene.
+- Glasnoća: linearno pojačanje do −14 LUFS, ograničeno true peakom od −1 dBTP, bez kompresora. Ako true peak ograniči pojačanje (na primer +6,1 dB do −18,8 LUFS), prijavi dostignutu vrednost. Pojačanje računaj ponovo kad god se segmenti promene.
 - Kraj je miran: poslednji kadar ili kartica drži se oko 1 do 1,5 s posle poslednje reči.
 - Pauze iz scenarija, na primer 1 s pre poente, uzimaju se iz stvarnog snimka.
 - Ako zvuk u originalu kasni za usnama (bežični mikrofon, oko 0,07 do 0,1 s), ostavi ga kao u originalu i prijavi.
