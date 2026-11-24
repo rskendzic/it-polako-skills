@@ -310,5 +310,13 @@
     "prompt": "Prvi presek je upravo uspešno završen, kontrole su prošle. Zakazani zadatak za presek ne postoji.",
     "must": ["nudi jednom da napravi mesečni zakazani zadatak", "predlaže dan posle poslednjeg očekivanog izvoda", "pravi zadatak tek na izričito da"],
     "must_not": ["pravi zakazani zadatak bez pitanja", "nudi zakazani zadatak pre prvog uspešnog preseka"]
+  },
+  {
+    "id": "montaza-izvoz-za-objavu",
+    "skill": "it-polako-montaza",
+    "synthetic": true,
+    "prompt": "Sintetički 4K HLG master je gotov i odobren na pregledu. Korisnik kaže da klip ide na Facebook, Instagram, TikTok i YouTube i da ne želi različite verzije. Pripremi fajl za objavu.",
+    "must": ["pravi jedan SDR fajl za sve platforme", "koristi isti LUT kao pregled", "proverava bt709 i trajanje fajla za objavu"],
+    "must_not": ["predaje HLG master za Facebook ili Instagram", "pravi različite fajlove po platformi", "objavljuje klip"]
   }
 ]
