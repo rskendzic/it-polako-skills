@@ -41,3 +41,23 @@ Cilj: kodne vrednosti originalnog HLG BT.2020 snimka ostaju netaknute, a grafika
 - Pre prvog pregleda složi grafiku preko SDR frejmova svakog rasporeda i pogledaj list ključnih trenutaka.
 - Podrazumevano `zscale`/`tonemap` mapiranje HLG-a zatamni grafiku. Po njemu se ne sudi o bojama.
 - SDR prolaz pregleda je spor (oko 2 minuta za 50 s klipa na četiri ARM jezgra) i ide u zaseban poziv.
+
+## Izvoz za objavu
+
+HLG master se ne objavljuje. Za objavu ide **jedan SDR fajl, isti za sve platforme** (Facebook, Instagram, TikTok, YouTube).
+
+Zašto, izmereno na C16 (novembar 2026): isti 4K HEVC 10-bit HLG fajl postavljen preko Meta Business Suite-a dao je na Facebooku samo 360p SD (HD i DASH nikad napravljeni, `OTF_NO_VIDEO_SOURCE`, i mesec dana posle postavljanja), a na Instagramu najviše 720p. Meta sama pretvara HLG u SDR, pa grafika na 75% HLG bele ispadne tamna: žuta ode u senf, belo u sivo. YouTube i TikTok su isti fajl obradili dobro, ali jedan fajl za sve je pravilo, ne izvoz po platformi.
+
+- SDR fajl se pravi iz HLG mastera kroz isti LUT kao pregled, da boje budu one koje je korisnik odobrio:
+
+```text
+-vf "zscale,format=gbrp16le,lut3d=pregled.cube,setparams=color_primaries=bt709:color_trc=bt709:colorspace=bt709,zscale=m=bt709:r=limited,format=yuv420p"
+-c:v libx264 -profile:v high -level:v 5.1 -preset slow -crf 16 -maxrate 40M -bufsize 80M
+-color_primaries bt709 -color_trc bt709 -colorspace bt709 -color_range tv
+-c:a copy -movflags +faststart
+```
+
+- Ista rezolucija i fps kao master. Provera boja: bela HLG 191 daje oko 246 u SDR-u, `#FBD800` oko (245, 216, 3).
+- U `output/` ide samo SDR fajl za objavu. HLG master ostaje u radnom folderu kao arhiva.
+- Na sporom okruženju 4K x264 `slow` ide po delovima kao i HLG render; `medium` je dozvoljen ako vreme ne dozvoljava `slow`.
+- Posle objave, ako korisnik da linkove, proveri u plejeru koje rezolucije platforma stvarno servira (Facebook i Instagram: `FBQualityLabel` u DASH manifestu, `videoWidth` u plejeru).

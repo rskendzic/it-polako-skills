@@ -4,7 +4,7 @@ description: Montira IT Polako talking-head klip od originalnog snimka telefona 
 license: MIT
 metadata:
   author: IT Polako
-  version: "0.2.1"
+  version: "0.3.0"
   language: sr-Latn-RS
 ---
 
@@ -38,7 +38,7 @@ Ako projekat ima sopstveni postupak montaže, na primer projektni `SKILL.md` sa 
 4. **Izbor tejkova i rez.** Za svaki tejk proveri da li je početak ponovljen, jer prepoznavanje govora spaja ponovljene fraze. Neprekinut tejk ima prednost nad rezom usred rečenice. Izmeri energiju zvuka na ivicama svakog segmenta i 1,2 s oko njih: kratka reč posle pauze ume da ostane van granice tišine. Kada naslov ili poenta citiraju rečenicu, izaberi tejk čije reči odgovaraju i isti oblik koristi u oba.
 5. **Jedan tretman.** Svaki vizuelni element ima narativni posao: naslov, obični titlovi, naglasci, umeci i kraj. Izgled prati [izgled serijala](references/izgled.md). Animirani svet, kada ga klip ima, prati [motion graphic](references/motion-graphic.md).
 6. **Pregled.** Pre pregleda pokreni prepoznavanje govora nad isečenim zvukom i uporedi ga sa titlovima reč po reč. Napravi lak pregled u nižoj rezoluciji kroz HLG→SDR LUT (`scripts/hlg_boje.py lut`). Sam pogledaj ključne frejmove: naslov uz referencu, ulaz i izlaz iz umetka, poentu i poslednji frejm. Kadriranje i raspored se rešavaju na pregledu. Ako je korisnik tu, pokaži mu pregled i sačekaj odobrenje pre 4K rendera.
-7. **Završni render.** Prati [HLG postupak](references/hlg.md). Ako okruženje ograničava trajanje poziva ili memoriju, radi po [ograničenom okruženju](references/ograniceno-okruzenje.md).
+7. **Završni render.** Prati [HLG postupak](references/hlg.md). Ako okruženje ograničava trajanje poziva ili memoriju, radi po [ograničenom okruženju](references/ograniceno-okruzenje.md). Iz HLG mastera napravi jedan SDR fajl za objavu na svim platformama, po odeljku „Izvoz za objavu” u istoj referenci. HLG fajl ne ide na Facebook ni Instagram.
 8. **Izveštaj.** Navedi tačnu putanju fajla, šta je kreativno urađeno, kako je postupak primenjen i šta nije provereno.
 
 ## Obavezno ponašanje
@@ -50,6 +50,7 @@ Ako projekat ima sopstveni postupak montaže, na primer projektni `SKILL.md` sa 
 - Umetak koji traje duže od jedne rečenice ide u podeljen ekran: gore umetak, dole govornik.
 - Snimljeni kadar govornika se ne rotira i ne menja mu se perspektiva. Motion graphic je nezavisan sloj i sme da kruži, menja perspektivu i ima sopstveni ritam.
 - Original ostaje netaknut. Rezolucija, fps i kolor namera ostaju kao u originalu, osim ako korisnik odobri drugačije.
+- Za objavu ide jedan SDR fajl (H.264, BT.709) za sve platforme, napravljen kroz LUT pregleda. HLG master se ne objavljuje: na Meti je dao 360p i 720p sa ispranim bojama.
 - Stvarni dokument se prikazuje stvarnim tekstom. Ilustracija se označava kao ilustracija, a prazan šablon je vidljivo prazan.
 - Bez muzike i risera, osim ako produkcione beleške traže drugačije. Zvučni efekat uz motion graphic je izuzetak koji korisnik odobrava po klipu.
 
@@ -62,6 +63,7 @@ Ako projekat ima sopstveni postupak montaže, na primer projektni `SKILL.md` sa 
 - Ne tvrdi da je nešto preslušano ako nije preslušano uhom. Napiši čime je provereno.
 - Ne tvrdi da je klip montiran po veštini ako postupak nije stvarno primenjen.
 - Ne objavljuj klip.
+- Ne predaj HLG master kao fajl za objavu i ne pravi različite fajlove po platformi.
 - Ne briši i ne presnimavaj tuđe fajlove.
 
 ## Provera
@@ -70,7 +72,8 @@ Završeno je tek kada:
 
 - sha256 originala je isti pre i posle;
 - broj frejmova po delu i ukupno odgovara planu, a na spojevima nema duplikata ni skokova (`tblend` razlika);
-- `ffprobe` finala pokazuje očekivanu rezoluciju i fps, HEVC Main10, `arib-std-b67` i `bt2020`;
+- `ffprobe` HLG mastera pokazuje očekivanu rezoluciju i fps, HEVC Main10, `arib-std-b67` i `bt2020`;
+- `ffprobe` fajla za objavu pokazuje istu rezoluciju i fps, H.264 High, `bt709`, `yuv420p`, i isto trajanje kao master; boje grafike na SDR frejmu odgovaraju pregledu;
 - naslov stoji uporedo sa referencom i odgovara joj po težini, nagibu, širini i senci;
 - prepoznavanje govora nad finalom daje sve rečenice redom, uz napomenu da ponavljanja ne otkriva;
 - glasnoća je izmerena: cilj oko −14 LUFS, true peak najviše −1 dBTP; ako true peak ograniči pojačanje, prijavljena je postignuta vrednost;

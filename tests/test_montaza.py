@@ -105,3 +105,13 @@ class MontazaContractTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class MontazaObjavaTests(unittest.TestCase):
+    def test_publish_export_is_single_sdr_file(self) -> None:
+        text = (SKILL / "SKILL.md").read_text(encoding="utf-8")
+        self.assertIn("jedan SDR fajl", text)
+        hlg = (SKILL / "references" / "hlg.md").read_text(encoding="utf-8")
+        self.assertIn("## Izvoz za objavu", hlg)
+        self.assertIn("lut3d=pregled.cube", hlg)
+        self.assertIn("bt709", hlg)
